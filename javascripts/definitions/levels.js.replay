@@ -1,0 +1,1031 @@
+function levels_data(levels) {
+  // <<<<<<<<<<
+  // << LEVEL 0
+  // <<<<<<<<<<
+
+  // tworzmy nowy poziom w nawiazie podajemy jego numer porzadkowy
+  var level_0 = levels.define_level(0);
+  // nazwa pojawiajaca sie na mapie
+  level_0.set_name("Gdyńska plaża");
+  // lewy dolny rog napisu
+  level_0.set_map_position(140, 50);
+  // prawy gorny rog klikany - aby wybrac poziom trzeba bedzie kliknac miedzy
+  // wyzej zdefiniowanym lewym dolnym rogiem a nizej definiowanym prawym gornym
+  level_0.set_map_clickable(220, 30); 
+  // pierwsza linijka opisu poziomu
+  level_0.set_description_line("My name is Nikodem Czarnecki, although everyone calls me Szron. I took a trip");
+  // kolejna linijka opisu poziomu
+  level_0.set_description_line("to Gdynia to eliminate some Ghuls, as my part of my contract with some local group of collectors. Since day one,");
+  level_0.set_description_line("nothing went as planned. It took a few full days to get through the Infected to my destination.");
+  level_0.set_description_line("When I arrived, it turned out that the number of mutant was, to put it mildly,");
+  level_0.set_description_line("underestimated by my contractors. As if my situation wasn't bad enough, the rain made it impossible for me to spot the trap in time.");
+  level_0.set_description_line("I guess 'fucked up' would describe my position best. And now off to straighten things up...");
+  
+
+  // opisujemy szczegoly mapy poziomu
+  level_0.set_level_data(
+    function level_data(level) {
+      // powtarzamy numer porzadkowy - koniecznie
+      level.set_id(0);
+
+      // ustawiamy tlo poziomu
+      level.set_background_image ('assets/img/levels/gdynska_plaza.png');
+      // (opcjonalnie) ustawiamy pierwszy plan poziomu - jest rysowany na tle i na postaciach
+      // level.set_foreground_image ('assets/img/levels/level_0_foreground.png');
+      
+      // ustawimy kolejne punkty z ktorych moga startowac boty, w nawiazie podajemy wspolrzedne tych punktow
+      // powinny byc poza mapa (lub w miejscu przykrytym pierwszym planem) tak aby gracz nie zobaczyl
+      // botow pojawiajacych sie z nikad
+      // PUNKTY STARTOWE MUSZA WYPADAC W DOSTEPNEJ PRZESTRZENI DLA BOTOW - inaczej boty sie nie pojawia
+      level.define_bot_start_point(308,-10);
+      level.define_bot_start_point(812,363);
+
+      // gdzie gra bedzie rozmieszczac postacie graczy
+      // dla kazdego poziomu musza byc 4 takie punkty, bo kazdy poziom bedzie mozna zagrac
+      // majac 4 postacie w druzynie
+      level.define_soldier_start_point(229,398);
+      level.define_soldier_start_point(278,398);
+      level.define_soldier_start_point(229,352);
+      level.define_soldier_start_point(278,352);
+
+      // limit jednoczesnie widocznych w grze botow
+      level.set_max_creatures(25);
+      // level.set_max_creatures(1);
+
+      // Tworzymy siatke poziomu
+      var mesh = level.mesh;
+
+      // definiujemy kolejne punkty siatki
+      // define_point( numer_porzadkowy, x, y)
+      // czesc puntkow jest "poza mapa" tak aby zostaly objete punkty startowe botow
+      mesh.define_point(0,341,-20);
+      mesh.define_point(1,418,21);
+      mesh.define_point(2,295,21);
+      mesh.define_point(3,207,21);
+      mesh.define_point(4,257,-20);
+      mesh.define_point(5,526,61);
+      mesh.define_point(6,651,61);
+      mesh.define_point(7,651,92);
+      mesh.define_point(8,736,92);
+      mesh.define_point(9,736,132);
+      mesh.define_point(10,651,169);
+      mesh.define_point(11,651,121);
+      mesh.define_point(12,596,121);
+      mesh.define_point(13,651,216);
+      mesh.define_point(14,521,121);
+      mesh.define_point(15,283,121);
+      mesh.define_point(16,238,121);
+      mesh.define_point(17,232,206);
+      mesh.define_point(18,262,180);
+      mesh.define_point(19,282,128);
+      mesh.define_point(20,391,223);
+      mesh.define_point(21,467,288);
+      mesh.define_point(22,486,226);
+      mesh.define_point(23,596,186);
+      mesh.define_point(24,591,226);
+      mesh.define_point(25,573,288);
+      mesh.define_point(26,651,288);
+      mesh.define_point(27,692,288);
+      mesh.define_point(28,690,328);
+      mesh.define_point(29,740,328);
+      mesh.define_point(30,820,328);
+      mesh.define_point(31,820,364);
+      mesh.define_point(32,740,402);
+      mesh.define_point(33,730,498);
+      mesh.define_point(34,714,572);
+	  mesh.define_point(35,397,582);
+	  mesh.define_point(36,358,526);
+	  mesh.define_point(37,332,498);
+	  mesh.define_point(38,302,432);
+	  mesh.define_point(39,302,288);
+	  mesh.define_point(40,371,288);
+	  mesh.define_point(41,320,259);
+	  mesh.define_point(42,278,288);
+	  mesh.define_point(43,621,168);
+	  mesh.define_point(44,54,288);
+	  mesh.define_point(45,54,432);
+	  mesh.define_point(46,210,432);
+	  mesh.define_point(47,302,498);
+	  mesh.define_point(48,210,498);
+	  mesh.define_point(49,54,498);
+	  mesh.define_point(50,54,576);
+	  mesh.define_point(51,252,576);
+	  mesh.define_point(52,54,152);
+	  mesh.define_point(53,54,22);
+	  mesh.define_point(54,178,227);
+	  mesh.define_point(55,692,148);
+	  mesh.define_point(56,365,270);
+	  mesh.define_point(57,594,547);
+	  mesh.define_point(58,233,237);
+	  mesh.define_point(59,250,266);
+	  mesh.define_point(60,277,272);
+	  mesh.define_point(61,555,548);
+
+      // opisujemy wielokaty po krotych beda poruszac sie postacie
+      // define_polygon( numer_porzadkowy, [ punkt_1, punkt_2, ... punkt_N ])
+      mesh.define_polygon(0, [0,1,2,3,4]);
+      mesh.define_polygon(1, [53,3,2,16,18,17,58,59,60,41,42,60,41,42,54,52]);
+      mesh.define_polygon(2, [2,1,5,6,7,8,9,55,10,11,12,14,15,16]);
+      mesh.define_polygon(3, [16,15,14,22,24,23,43,12,11,10,13,26,25,21,40,39,42,41,56,20,19,18]);
+      mesh.define_polygon(4, [39,40,21,25,26,13,10,55,27,28,29,30,31,32,33,34,57,61,35,36,37,47,38]);
+      mesh.define_polygon(5, [52,54,42,39,38,46,48,47,37,36,51,50,49,45,44]);
+     
+
+      // definiujemy bramy miedzy prostokatami
+      // define_gate( prostokat_A, prostokat_B, punkt_wspolny_1, punkt_wspolny_2);
+      mesh.define_gate(0,1,2,3);
+      mesh.define_gate(0,2,1,2);
+      mesh.define_gate(1,2,16,2);
+      mesh.define_gate(1,3,16,18);
+      mesh.define_gate(2,5,52,54);
+      mesh.define_gate(3,4,39,40);
+      mesh.define_gate(4,3,21,40);
+      mesh.define_gate(4,3,21,25);
+      mesh.define_gate(4,3,26,25);
+      mesh.define_gate(4,3,26,13);
+      mesh.define_gate(4,3,13,10);
+      mesh.define_gate(2,3,12,11);
+	  mesh.define_gate(2,3,11,10);
+	  mesh.define_gate(4,5,39,38);
+	  mesh.define_gate(3,5,42,39);
+	  mesh.define_gate(4,5,47,37);
+	  mesh.define_gate(4,5,37,36);
+	  mesh.define_gate(2,3,15,14);
+	  mesh.define_gate(2,3,15,16);
+	  mesh.define_gate(2,4,55,10);
+	  mesh.define_gate(1,5,54,42);
+
+      // definiujemy sciany, uniemozliwiajace strzelanie przez przeszkody
+      // define_wall( punkt_1, punkt_2 )
+      mesh.define_wall(46,38);
+      mesh.define_wall(38,47);
+      mesh.define_wall(48,47);
+      mesh.define_wall(48,46);
+      mesh.define_wall(60,41);
+      mesh.define_wall(42,41);
+      mesh.define_wall(41,56);
+      mesh.define_wall(20,56);
+      mesh.define_wall(20,19);
+      mesh.define_wall(18,19);
+      mesh.define_wall(17,18);
+      mesh.define_wall(17,58);
+      mesh.define_wall(14,12);
+      mesh.define_wall(12,43);
+      mesh.define_wall(23,43);
+      mesh.define_wall(23,24);
+      mesh.define_wall(24,22);
+      mesh.define_wall(22,14);
+	  mesh.define_wall(29,28);
+	  mesh.define_wall(28,27);
+	  mesh.define_wall(27,55);
+	  mesh.define_wall(55,9);
+	  mesh.define_wall(58,59);
+	  mesh.define_wall(60,59);
+      
+
+      // wave'y
+      // dwa wave'y nie moga zdarzyc sie w tej samej klatce
+      // w fali musi byc po rekordzie na kazdy punkt startowy - jesli boty maja stamtad nie wychodzi
+      // nalezy wpisac pusta tablice
+      // define_wave( numer_klatki, 
+      //   [
+      //     { "Kreatura_A": liczebnosc, "Kreatura_B": liczebnosc, ..., "Kreatura_Z": liczebnosc }, // kolejne elementy tablicy
+      //     { "Kreature_A": liczebnosc, "Kreatura_B": liczebnosc } // to kolejne punkty startowe
+      //     {}, // pusta tablica jesli z punktu nie ma nikt wychodzic
+      //   ]
+      // )
+      // z pierwsze punktu szczury, z drugiego mutanty
+      level.define_wave( 3 * 24 , 
+        [
+          //{ "Szczur": 3, "Korsarz": 1 },  
+          { "Zmutowany_gryzon": 1 },
+        ]
+      );
+      level.define_wave( 13 * 24 , 
+        [
+          // { "Szczur": 3, "Korsarz": 1 },
+          { "Zmutowany_gryzon": 3 },
+        ]
+      );
+	  level.define_wave( 33 * 24 , 
+        [
+          // { "Szczur": 3, "Korsarz": 1 },
+          { "Zmutowany_gryzon": 2 },
+        ]
+      );
+	  level.define_wave( 38 * 24 , 
+        [
+          // { "Szczur": 3, "Korsarz": 1 },
+          {},
+		  { "Zmutowany_gryzon": 3 },
+        ]
+      );
+
+	  level.define_replay_wave( 1 * 24 , 
+        [
+          { "Szczur": 3, "Korsarz": 1 },
+          {},
+        ]
+      );
+
+      // definiujemy nagrody
+      // define_prizes( { "Klucz_itemu_1": liczba, "Klucz_itemu_2": liczba, ..., "Klucz_itemu_6": liczba } )
+      level.define_prizes( {
+        "Nowak-3": 1,
+        "Naboje pistoletowe-samoróbki": 2,
+      });
+
+      level.define_replay_prizes( {
+        "Nowak-3": 2,
+        "Naboje pistoletowe-samoróbki": 2,
+      });
+
+      // Dialogi w grze, po prostu tablica do kolejnych obrazkow z rozmowami
+      // jesli w poziomie nie ma dialogow nie umieszczac w ogole
+      level.define_speeches( [
+          'assets/img/levels/speech_0_1.png',
+          'assets/img/levels/speech_0_2.png',
+          'assets/img/levels/speech_0_3.png',
+      ]);
+
+      level.define_replay_speeches( [
+          'assets/img/levels/speech_0_1.png',
+          'assets/img/levels/speech_0_2.png',
+          'assets/img/levels/speech_0_3.png',
+      ]);
+
+      // Dialogi po wygraniu poziomu, po prostu tablica do kolejnych obrazkow z rozmowami
+      // jesli w poziomie nie ma dialogow nie umieszczac w ogole
+      level.define_end_speeches( [
+          'assets/img/levels/speech_0_1.png',
+          'assets/img/levels/speech_0_2.png',
+          'assets/img/levels/speech_0_3.png',
+      ]);
+
+      level.define_replay_end_speeches( [
+          'assets/img/levels/speech_0_1.png',
+          'assets/img/levels/speech_0_2.png',
+          'assets/img/levels/speech_0_3.png',
+      ]);
+
+      // Tipsy w grze, po prostu tablica do kolejnych obrazkow z tipami
+      // jesli w poziomie nie ma tipow nie umieszczac w ogole
+      level.define_tips( [
+          'assets/img/levels/tip_0_1.png',
+          'assets/img/levels/tip_0_2.png',
+      ]);
+
+      // definiujemy ilosc violek nagrody
+      level.define_violki_prize(500);
+
+      level.define_replay_violki_prize(500);
+    }
+  );
+
+  // >>>>>>>>>>
+  // LEVEL 0 >>
+  // >>>>>>>>>>
+
+  // <<<<<<<<<<
+  // << LEVEL 1
+  // <<<<<<<<<<
+
+  var level_1 = levels.define_level(1);
+  level_1.set_name("Sopocka ulica");
+  level_1.set_map_position(160, 90);
+  level_1.set_map_clickable(240, 70); // prawy gorny rog klikany
+  level_1.set_description_line("Mniej więcej w tym miejscu powinienem spotkać Olafa. Ciekawe jak złą wiadomość chce mi");
+  level_1.set_description_line("przekazać moja <i>ukochana siostrzyczka<i/>.");
+  level_1.set_description_line("W okolicy widziałem Zarażonych. Te śmierdzące snujące się martwiaki są dużo wytrzymalsze od");
+  level_1.set_description_line("zmutowanych szczurów. Wypadałoby skombinować jakąś solidniejszą niż własne ręce broń. Nie");
+  level_1.set_description_line("zaszkodzi zabrać też trochę medykamentów lub specyfików o ile tylko starczy mi na to violek.");
+  level_1.set_previous(0);
+
+  level_1.set_level_data(
+    function level_data(level) {
+      level.set_id(1);
+
+      level.set_background_image ('assets/img/levels/Sopocka_ulica.png');
+      // level.set_foreground_image ('assets/img/levels/level_0_foreground.png');
+
+      // dochodzacy zolniez - parametry
+      // id - karta postaci, liczona od zera
+      // nawa postaci z pliku soldiers.js
+      // opcjonalnie zalozona bron
+      // opcjonalnie zalozony armour
+      // 4 * opcjonalnie item w plecaku
+      level.add_survivor(1, "Wojownik", "Gdański trójząb", "Dopalacz", "Post apokaliptyczny zestaw opatrunkowy", "Post apokaliptyczny zestaw opatrunkowy" );
+
+      level.define_bot_start_point(824,97);
+      level.define_bot_start_point(824,296);
+      level.define_bot_start_point(824,486);
+      level.define_bot_start_point(320,624);
+      level.define_bot_start_point(-20,93);
+	  level.define_bot_start_point(824,258)
+
+      level.define_soldier_start_point(694,100);
+      level.define_soldier_start_point(646,100);
+      level.define_soldier_start_point(385,100);
+      level.define_soldier_start_point(330,100);
+
+      level.set_max_creatures(25);
+      // level.set_max_creatures(1);
+
+      var mesh = level.mesh;
+
+      // mesh.define_point();
+      mesh.define_point(0,825,34);
+      mesh.define_point(1,825,170);
+      mesh.define_point(2,635,170);
+      mesh.define_point(3,603,170);
+      mesh.define_point(4,490,142);
+      mesh.define_point(5,490,34);
+      mesh.define_point(6,606,218);
+      mesh.define_point(7,635,237);
+      mesh.define_point(8,635,261);
+      mesh.define_point(9,825,261);
+      mesh.define_point(10,825,404);
+      mesh.define_point(11,594,404);
+      mesh.define_point(12,579,375);
+      mesh.define_point(13,597,286);
+      mesh.define_point(14,825,432);
+      mesh.define_point(15,554,433);
+      mesh.define_point(16,825,554);
+      mesh.define_point(17,554,554);
+      mesh.define_point(18,416,554);
+      mesh.define_point(19,278,554);
+      mesh.define_point(20,160,554);
+      mesh.define_point(21,210,433);
+      mesh.define_point(22,513,433);
+      mesh.define_point(23,342,625);
+      mesh.define_point(24,308,625);
+      mesh.define_point(25,140,350);
+      mesh.define_point(26,184,301);
+      mesh.define_point(27,446,301);
+      mesh.define_point(28,159,280);
+      mesh.define_point(29,100,280);
+      mesh.define_point(30,142,236);
+      mesh.define_point(31,192,202);
+      mesh.define_point(32,30,142);
+      mesh.define_point(33,192,142);
+      mesh.define_point(34,-20,142);
+      mesh.define_point(35,-20,34);
+      mesh.define_point(36,192,34);
+
+      mesh.define_polygon(0, [0,1,9,10,14,16,17,15,11,12,13,8,7,2,3,4,5]);
+      mesh.define_polygon(1, [3,2,7,6]);
+      mesh.define_polygon(2, [19,18,23,24]);
+      mesh.define_polygon(3, [36,5,4,27,22,15,17,18,19,20,21,25,26,28,29,30,31,33]);
+      mesh.define_polygon(4, [35,36,33,31,32,34]);
+
+      mesh.define_gate(0,1,2,7);
+      mesh.define_gate(0,1,3,2);
+      mesh.define_gate(0,3,5,4);
+      mesh.define_gate(0,3,15,17);
+      mesh.define_gate(3,2,19,18);
+      mesh.define_gate(3,4,31,33);
+      mesh.define_gate(3,4,33,36);
+
+      mesh.define_wall(4,3);
+      mesh.define_wall(3,6);
+      mesh.define_wall(12,13);
+      mesh.define_wall(15,22);
+      mesh.define_wall(22,27);
+      mesh.define_wall(27,4);
+      mesh.define_wall(23,18);
+      mesh.define_wall(25,26);
+      mesh.define_wall(28,29);
+      mesh.define_wall(29,30);
+      mesh.define_wall(31,32);
+      mesh.define_wall(32,34);
+      mesh.define_wall(24,19);
+
+      // wave'y
+      // dwa wave'y nie moga zdarzyc sie w tej samej klatce
+      level.define_wave( 24 * 6 ,
+        [
+          { "Mutant": 1 },
+          { "Mutant": 1 },
+          { "Mutant": 1 },
+          { },
+          { },
+		  { },
+        ]
+      );
+	   level.define_wave( 24 * 31 ,
+        [
+          { "Mutant": 1 },
+          { "Mutant": 2 },
+          { "Mutant": 2 },
+          { "Mutant": 2 },
+          { },
+		  { },
+        ]
+      );
+	  level.define_wave( 24 * 151 ,
+        [
+          { "Mutant": 1 },
+          { "Mutant": 1 },
+          { "Mutant": 1 },
+          { "Mutant": 1 },
+          { },
+		  { "Mutant": 6 },
+        ]
+      );
+	  level.define_wave( 24 * 301 ,
+        [
+          { "Mutant": 2 },
+          { "Mutant": 2 },
+          { "Mutant": 2 },
+          { "Mutant": 2 },
+          { },
+		  { },
+        ]
+      );
+	  level.define_wave( 24 * 381 ,
+        [
+          { },
+          { },
+          { },
+          { },
+          { "Szczur": 4 },
+		  { },
+        ]
+      );
+	  level.define_wave( 24 * 461 ,
+        [
+          { "Mutant": 2 },
+          { "Mutant": 2 },
+          { "Mutant": 2 },
+          { "Mutant": 2 },
+          { "Mutant": 2 },
+		  { "Mutant": 2 },
+        ]
+	  );
+	  
+
+      level.define_prizes( {
+        "Naboje 5,56 mm": 3,
+        "Karabinek": 2,
+      });
+
+      level.define_violki_prize(1000);
+    }
+  );
+
+  // >>>>>>>>>>
+  // LEVEL 1 >>
+  // >>>>>>>>>>
+  
+   // <<<<<<<<<<
+  // << LEVEL 2
+  // <<<<<<<<<<
+
+  // tworzmy nowy poziom w nawiazie podajemy jego numer porzadkowy
+  var level_2 = levels.define_level(2);
+  // nazwa pojawiajaca sie na mapie
+  level_2.set_name("Gdańska fabryka");
+  // lewy dolny rog napisu
+  level_2.set_map_position(72, 79);
+  // prawy gorny rog klikany - aby wybrac poziom trzeba bedzie kliknac miedzy
+  // wyzej zdefiniowanym lewym dolnym rogiem a nizej definiowanym prawym gornym
+  level_2.set_map_clickable(152, 59); 
+  // pierwsza linijka opisu poziomu
+  level_2.set_description_line("Ta fabryka nie ucierpiała szczególnie wskutek tej całej pieprzonej apokalipsy czy, jak kto woli,");
+  // kolejna linijka opisu poziomu
+  level_2.set_description_line("Violet Fall'a. Dzięki czemu Bractwo ma nadzieje, że nadal znajdują się tam jakieś niezbędne im");
+  level_2.set_description_line("podzespoły czy inne technograty.");
+  level_2.set_description_line("Poza Zarażonymi mogą kręcić się w tej okolicy niezbyt przyjaźni nam ludzie. W końcu bandytów w");
+  level_2.set_description_line("tym kraju jest pod dostatkiem. Na takiego przeciwnika lepiej przyjąć zupełnie inną taktykę. W");
+  level_2.set_description_line("końcu są oni dużo szybsi i bystrzejsi od martwiaków. Najłatwiej zdjąć ich z broni palnej, ale,");
+  level_2.set_description_line("wiadomo, amunicja nigdy nie jest tania.");
+  level_2.set_previous(1);
+  // opisujemy szczegoly mapy poziomu
+  level_2.set_level_data(
+    function level_data(level) {
+      // powtarzamy numer porzadkowy - koniecznie
+      level.set_id(2);
+
+      // ustawiamy tlo poziomu
+      level.set_background_image ('assets/img/levels/Gdanska_fabryka.png');
+      // (opcjonalnie) ustawiamy pierwszy plan poziomu - jest rysowany na tle i na postaciach
+      // level.set_foreground_image ('assets/img/levels/level_0_foreground.png');
+
+      // ustawimy kolejne punkty z ktorych moga startowac boty, w nawiazie podajemy wspolrzedne tych punktow
+      // powinny byc poza mapa (lub w miejscu przykrytym pierwszym planem) tak aby gracz nie zobaczyl
+      // botow pojawiajacych sie z nikad
+      level.define_bot_start_point(370,-18);
+	  level.define_bot_start_point(370,618);
+      
+
+      // gdzie gra bedzie rozmieszczac postacie graczy
+      // dla kazdego poziomu musza byc 4 takie punkty, bo kazdy poziom bedzie mozna zagrac
+      // majac 4 postacie w druzynie
+      level.define_soldier_start_point(379,388);
+      level.define_soldier_start_point(448,388);
+      level.define_soldier_start_point(379,439);
+      level.define_soldier_start_point(448,439);
+
+      // limit jednoczesnie widocznych w grze botow
+      level.set_max_creatures(25);
+      // level.set_max_creatures(1);
+
+      // Tworzymy siatke poziomu
+      var mesh = level.mesh;
+
+      // definiujemy kolejne punkty siatki
+      // define_point( numer_porzadkowy, x, y)
+      // czesc puntkow jest "poza mapa" tak aby zostaly objete punkty startowe botow
+      mesh.define_point(0,20,20);
+      mesh.define_point(1,160,20);
+      mesh.define_point(2,160,92);
+      mesh.define_point(3,160,521);
+      mesh.define_point(4,160,579);
+      mesh.define_point(5,20,579);
+      mesh.define_point(6,277,20);
+      mesh.define_point(7,520,20);
+      mesh.define_point(8,780,20);
+      mesh.define_point(9,780,92);
+      mesh.define_point(10,652,92);
+      mesh.define_point(11,584,92);
+      mesh.define_point(12,566,92);
+      mesh.define_point(13,533,92);
+      mesh.define_point(14,294,92);
+      mesh.define_point(15,242,92);
+      mesh.define_point(16,277,-20);
+      mesh.define_point(17,520,-20);
+      mesh.define_point(18,533,136);
+      mesh.define_point(19,533,220);
+      mesh.define_point(20,533,255);
+      mesh.define_point(21,446,264);
+      mesh.define_point(22,380,264);
+      mesh.define_point(23,294,264);
+      mesh.define_point(24,294,146);
+      mesh.define_point(25,242,122);
+      mesh.define_point(26,380,328);
+      mesh.define_point(27,294,328);
+      mesh.define_point(28,446,328);
+      mesh.define_point(29,561,328);
+      mesh.define_point(30,652,328);
+      mesh.define_point(31,652,255);
+      mesh.define_point(32,604,255);
+      mesh.define_point(33,652,154);
+      mesh.define_point(34,652,413);
+      mesh.define_point(35,652,475);
+      mesh.define_point(36,674,475);
+      mesh.define_point(37,780,475);
+      mesh.define_point(38,674,509);
+      mesh.define_point(39,674,579);
+      mesh.define_point(40,780,579);
+      mesh.define_point(41,638,579);
+      mesh.define_point(42,602,366);
+      mesh.define_point(43,559,366);
+      mesh.define_point(44,559,475);
+      mesh.define_point(45,294,440);
+      mesh.define_point(46,412,475);
+      mesh.define_point(47,364,475);
+      mesh.define_point(48,294,475);
+      mesh.define_point(49,294,366);
+      mesh.define_point(50,536,497);
+      mesh.define_point(51,412,497);
+      mesh.define_point(52,412,514);
+      mesh.define_point(53,364,514);
+      mesh.define_point(54,322,514);
+      mesh.define_point(55,342,579);
+      mesh.define_point(56,470,579);
+      mesh.define_point(57,294,521);
+      mesh.define_point(58,257,521);
+      mesh.define_point(59,257,579);
+      mesh.define_point(60,257,620);
+      mesh.define_point(61,470,620);
+      mesh.define_point(62,216,521);
+      mesh.define_point(63,216,440);
+
+
+      // opisujemy wielokaty po krotych beda poruszac sie postacie
+      // define_polygon( numer_porzadkowy, [ punkt_1, punkt_2, ... punkt_N ])
+      mesh.define_polygon(0, [0,1,2,3,62,58,57,59,4,5]);
+      mesh.define_polygon(1, [1,6,7,8,9,37,40,39,41,38,36,35,34,30,31,33,10,11,12,13,14,15,2]);
+      mesh.define_polygon(2, [15,14,13,12,18,19,32,20,21,22,26,27,23,24,25]);
+      mesh.define_polygon(3, [21,20,32,31,30,34,29,28]);
+      mesh.define_polygon(4, [27,26,28,29,42,43,44,50,51,46,47,48,45,49]);
+      mesh.define_polygon(5, [63,45,48,57,58,62]);
+      mesh.define_polygon(6, [47,46,51,52,53]);
+      mesh.define_polygon(7, [53,52,56,55,54]);
+      mesh.define_polygon(8, [59,55,56,61,60]);
+      mesh.define_polygon(9, [16,17,7,6]);
+      mesh.define_polygon(10, [11,10,33]);
+
+      // definiujemy bramy miedzy prostokatami
+      // define_gate( prostokat_A, prostokat_B, punkt_wspolny_1, punkt_wspolny_2);
+      mesh.define_gate(0,1,1,2);
+      mesh.define_gate(0,5,58,57);
+      mesh.define_gate(0,5,62,58);
+      mesh.define_gate(1,2,14,13);
+      mesh.define_gate(1,2,12,13);
+      mesh.define_gate(1,2,14,15);
+      mesh.define_gate(1,3,30,31);
+      mesh.define_gate(1,3,34,30);
+      mesh.define_gate(1,10,11,10);
+      mesh.define_gate(1,10,10,33);
+      mesh.define_gate(2,3,21,20);
+      mesh.define_gate(2,3,22,32);
+      mesh.define_gate(2,4,26,27);
+      mesh.define_gate(3,4,28,29);
+      mesh.define_gate(3,4,29,42);
+      mesh.define_gate(4,5,45,48);
+      mesh.define_gate(4,6,46,51);
+      mesh.define_gate(4,6,46,47);
+      mesh.define_gate(6,7,53,52);
+      mesh.define_gate(7,8,55,56);
+      mesh.define_gate(1,9,6,7);
+
+      // definiujemy sciany, uniemozliwiajace strzelanie przez przeszkody
+      // define_wall( punkt_1, punkt_2 )
+      mesh.define_wall(2,15);
+      mesh.define_wall(15,25);
+      mesh.define_wall(24,25);
+      mesh.define_wall(24,23);
+      mesh.define_wall(27,23);
+      mesh.define_wall(49,27);
+      mesh.define_wall(49,45);
+      mesh.define_wall(45,63);
+      mesh.define_wall(63,62);
+      mesh.define_wall(62,3);
+      mesh.define_wall(3,2);
+      mesh.define_wall(22,21);
+      mesh.define_wall(21,28);
+      mesh.define_wall(26,28);
+      mesh.define_wall(26,22);
+      mesh.define_wall(19,32);
+      mesh.define_wall(31,32);
+      mesh.define_wall(31,33);
+      mesh.define_wall(33,11);
+      mesh.define_wall(11,12);
+      mesh.define_wall(12,18);
+      mesh.define_wall(18,19);
+      mesh.define_wall(61,56);
+      mesh.define_wall(56,52);
+      mesh.define_wall(52,51);
+      mesh.define_wall(51,50);
+      mesh.define_wall(50,44);
+      mesh.define_wall(44,43);
+      mesh.define_wall(43,42);
+      mesh.define_wall(42,34);
+      mesh.define_wall(34,35);
+      mesh.define_wall(35,36);
+      mesh.define_wall(36,38);
+      mesh.define_wall(38,41);
+      mesh.define_wall(54,55);
+      mesh.define_wall(54,53);
+      mesh.define_wall(53,47);
+      mesh.define_wall(47,48);
+      mesh.define_wall(48,57);
+      mesh.define_wall(57,59);
+      mesh.define_wall(59,55);
+
+      // wave'y
+      // dwa wave'y nie moga zdarzyc sie w tej samej klatce
+      level.define_wave( 24 , 
+        [
+          { "Korsarz": 4 },
+          { },
+        ]
+      );
+	  level.define_wave( 24 * 40, 
+        [
+          { "Korsarz": 6 },
+          { "Mutant": 2 },
+        ]
+      );
+	  level.define_wave( 24 * 160, 
+        [
+          { "Korsarz": 4 },
+          { "Mutant": 4 },
+        ]
+      );
+
+      // definiujemy nagrody
+      // define_prizes( { "Klucz_itemu_1": liczba, "Klucz_itemu_2": liczba, ..., "Klucz_itemu_6": liczba } )
+      level.define_prizes( {
+        "Naboje 5,56 mm": 2,
+        "Karabinek": 1,
+      });
+
+      // definiujemy ilosc violek nagrody
+      level.define_violki_prize(500);
+    }
+  );
+
+  // >>>>>>>>>>
+  // LEVEL 2 >>
+  // >>>>>>>>>>
+  
+   // <<<<<<<<<<
+  // << LEVEL 3
+  // <<<<<<<<<<
+
+  
+  // tworzmy nowy poziom w nawiazie podajemy jego numer porzadkowy
+  var level_3 = levels.define_level(3);
+  // nazwa pojawiajaca sie na mapie
+  level_3.set_name("Gdańskie wybrzeże");
+  // lewy dolny rog napisu
+  level_3.set_map_position(72, 120);
+  // prawy gorny rog klikany - aby wybrac poziom trzeba bedzie kliknac miedzy
+  // wyzej zdefiniowanym lewym dolnym rogiem a nizej definiowanym prawym gornym
+  level_3.set_map_clickable(152, 109); 
+  // pierwsza linijka opisu poziomu
+  level_3.set_description_line("W tej okolicy, zdaniem Olafa, zatrzyma się niebawem jeden ze statków Bractwa Neptuna. Trzeba");
+  // kolejna linijka opisu poziomu
+  level_3.set_description_line("się nim zabrać, bo nie uśmiechają mi się tygodnie spędzone na bezdrożach w drodze do Warszawy.");
+  level_3.set_description_line("Ta okolica wielokrotnie została wyczyszczona z mutantów czy innych Zarażonych przez");
+  level_3.set_description_line("portowców. Ma to jednak swoje minusy. Największym z nich jest spora szansa na grasujących tu bandytów.");
+  level_3.set_description_line("Ci bardziej majętni mogą posiadać jakieś proste, śmieciowe spluwy i to chyba najpoważniejsze");
+  level_3.set_description_line("zagrożenie jakie może nas spotkać. Głupim pomysłem jest stawanie jak debil na otwartym polu by");
+  level_3.set_description_line("wymieniać się z nimi ołowiem lub co gorsza szarżowaniem z tej pozycji mając za broń ledwie");
+  level_3.set_description_line("kawał kija. Słowo klucz to osłony. Dobrze jakieś poszukać i zaatakować dopiero jak goście z klamkami się zbliżą.");
+  level_3.set_previous(1);
+  // opisujemy szczegoly mapy poziomu
+  level_3.set_level_data(
+    function level_data(level) {
+      // powtarzamy numer porzadkowy - koniecznie
+      level.set_id(3);
+
+      // ustawiamy tlo poziomu
+      level.set_background_image ('assets/img/levels/gdanskie_wybrzeze.png');
+      // (opcjonalnie) ustawiamy pierwszy plan poziomu - jest rysowany na tle i na postaciach
+      // level.set_foreground_image ('assets/img/levels/level_0_foreground.png');
+
+      // ustawimy kolejne punkty z ktorych moga startowac boty, w nawiazie podajemy wspolrzedne tych punktow
+      // powinny byc poza mapa (lub w miejscu przykrytym pierwszym planem) tak aby gracz nie zobaczyl
+      // botow pojawiajacych sie z nikad
+      level.define_bot_start_point(585,-20);
+      level.define_bot_start_point(327,-20);
+      level.define_bot_start_point(-20,100);
+      level.define_bot_start_point(-20,307);
+      level.define_bot_start_point(-20,489);
+      level.define_bot_start_point(135,620);
+      level.define_bot_start_point(162,-20);
+      level.define_bot_start_point(330,620);
+
+      // gdzie gra bedzie rozmieszczac postacie graczy
+      // dla kazdego poziomu musza byc 4 takie punkty, bo kazdy poziom bedzie mozna zagrac
+      // majac 4 postacie w druzynie
+      level.define_soldier_start_point(542,284);
+      level.define_soldier_start_point(500,284);
+      level.define_soldier_start_point(500,332);
+      level.define_soldier_start_point(542,332);
+
+      // limit jednoczesnie widocznych w grze botow
+      level.set_max_creatures(25);
+      // level.set_max_creatures(1);
+
+      // Tworzymy siatke poziomu
+      var mesh = level.mesh;
+
+      // definiujemy kolejne punkty siatki
+      // define_point( numer_porzadkowy, x, y)
+      // czesc puntkow jest "poza mapa" tak aby zostaly objete punkty startowe botow
+      mesh.define_point(0,612,-20);
+      mesh.define_point(1,612,166);
+      mesh.define_point(2,547,166);
+      mesh.define_point(3,547,40);
+      mesh.define_point(4,547,-20);
+      mesh.define_point(5,517,-20);
+      mesh.define_point(6,517,40);
+      mesh.define_point(7,454,70);
+      mesh.define_point(8,169,70);
+      mesh.define_point(9,-20,70);
+      mesh.define_point(10,-20,-20);
+      mesh.define_point(11,612,201);
+      mesh.define_point(12,688,201);
+      mesh.define_point(13,688,243);
+      mesh.define_point(14,800,243);
+      mesh.define_point(15,800,356);
+      mesh.define_point(16,612,356);
+      mesh.define_point(17,612,222);
+      mesh.define_point(18,612,412);
+      mesh.define_point(19,458,412);
+      mesh.define_point(20,254,412);
+      mesh.define_point(21,212,387);
+      mesh.define_point(22,212,341);
+      mesh.define_point(23,212,297);
+      mesh.define_point(24,212,256);
+      mesh.define_point(25,250,222);
+      mesh.define_point(26,417,222);
+      mesh.define_point(27,431,222);
+      mesh.define_point(28,296,182);
+      mesh.define_point(29,371,182);
+      mesh.define_point(30,368,462);
+      mesh.define_point(31,408,524);
+      mesh.define_point(32,469,620);
+      mesh.define_point(33,306,620);
+      mesh.define_point(34,306,558);
+      mesh.define_point(35,334,524);
+      mesh.define_point(36,293,485);
+      mesh.define_point(37,284,455);
+      mesh.define_point(38,279,548);
+      mesh.define_point(39,246,576);
+      mesh.define_point(40,220,620);
+      mesh.define_point(41,220,546);
+      mesh.define_point(42,220,524);
+      mesh.define_point(43,114,424);
+      mesh.define_point(44,66,424);
+      mesh.define_point(45,66,620);
+      mesh.define_point(46,-20,620);
+      mesh.define_point(47,-20,341);
+      mesh.define_point(48,66,341);
+      mesh.define_point(49,-20,226);
+      mesh.define_point(50,88,226);
+      mesh.define_point(51,-20,175);
+      mesh.define_point(52,88,175);
+      mesh.define_point(53,106,175);
+      mesh.define_point(54,166,130);
+      mesh.define_point(55,464,166);
+      mesh.define_point(56,192,373);
+      mesh.define_point(57,172,386);
+      mesh.define_point(58,123,341);
+
+      // opisujemy wielokaty po krotych beda poruszac sie postacie
+      // define_polygon( numer_porzadkowy, [ punkt_1, punkt_2, ... punkt_N ])
+      mesh.define_polygon(0, [0,1,11,12,13,14,15,16,17,27,55,2,3,4]);
+      mesh.define_polygon(1, [17,16,18,19,20,21,22,23,24,25,28,29,26,27]);
+      mesh.define_polygon(2, [4,3,6,7,8,9,10,5]);
+      mesh.define_polygon(3, [20,19,30,31,32,33,34,35,36,37]);
+      mesh.define_polygon(4, [9,8,54,53,52,50,49,51]);
+      mesh.define_polygon(5, [49,50,23,22,21,56,57,58,48,47]);
+      mesh.define_polygon(6, [47,48,44,43,42,41,39,38,34,33,40,45,46]);
+	  
+      // definiujemy bramy miedzy prostokatami
+      // define_gate( prostokat_A, prostokat_B, punkt_wspolny_1, punkt_wspolny_2);
+      mesh.define_gate(0,1,27,17);
+      mesh.define_gate(0,1,16,17);
+      mesh.define_gate(0,2,4,3);
+      mesh.define_gate(1,3,20,19);
+      mesh.define_gate(1,5,21,22);
+      mesh.define_gate(1,5,22,23);
+      mesh.define_gate(2,4,9,8);
+      mesh.define_gate(4,5,49,50);
+      mesh.define_gate(5,6,47,48);
+      mesh.define_gate(3,6,33,34);
+
+
+      // definiujemy sciany, uniemozliwiajace strzelanie przez przeszkody
+      // define_wall( punkt_1, punkt_2 )
+      mesh.define_wall(3,6);
+      mesh.define_wall(3,2);
+      mesh.define_wall(2,55);
+      mesh.define_wall(55,27);
+      mesh.define_wall(27,26);
+      mesh.define_wall(26,29);
+      mesh.define_wall(29,28);
+      mesh.define_wall(28,25);
+      mesh.define_wall(25,24);
+      mesh.define_wall(24,23);
+      mesh.define_wall(23,50);
+      mesh.define_wall(50,52);
+      mesh.define_wall(52,53);
+      mesh.define_wall(53,54);
+      mesh.define_wall(7,8);
+      mesh.define_wall(7,6);
+      mesh.define_wall(54,8);
+      mesh.define_wall(48,58);
+      mesh.define_wall(58,57);
+      mesh.define_wall(57,56);
+      mesh.define_wall(56,21);
+      mesh.define_wall(21,20);
+      mesh.define_wall(20,37);
+      mesh.define_wall(37,36);
+      mesh.define_wall(36,35);
+      mesh.define_wall(35,34);
+      mesh.define_wall(34,38);
+      mesh.define_wall(38,39);
+      mesh.define_wall(39,41);
+      mesh.define_wall(41,42);
+      mesh.define_wall(42,43);
+      mesh.define_wall(43,44);
+      mesh.define_wall(44,48);
+
+      level.define_wave( 24 , 
+        [
+         { },
+         { },
+         { "Korsarz": 1 },
+         { "Korsarz": 1 },
+         { "Korsarz": 1 },
+         { },
+         { },
+         { },
+        ]
+      );
+	  level.define_wave( 24 * 90 , 
+        [
+         { },
+         { },
+         { "Korsarz": 1 },
+         { "Korsarz": 1 },
+         { "Korsarz": 1 },
+         { "Korsarz": 1 },
+         { },
+         { "Korsarz": 1 },
+        ]
+      );
+	  level.define_wave( 24 * 210 , 
+        [
+         { },
+         { },
+         { "Korsarz": 1, "Korsarz_7": 1 },
+         { "Korsarz": 1 },
+         { "Korsarz": 1, "Korsarz_7": 1 },
+         { },
+         { },
+         { },
+        ]
+      );
+	  level.define_wave( 24 * 350 , 
+        [
+         { "Korsarz": 1, "Korsarz_7": 1 },
+         { "Korsarz_7": 1 },
+         { },
+         { },
+         { },
+         { },
+         { "Korsarz": 1, "Korsarz_7": 2 },
+         { },
+        ]
+      );
+	   level.define_wave( 24 * 510 , 
+        [
+         { "Korsarz_7": 1 },
+         { "Korsarz_7": 1 },
+         { "Korsarz_7": 1 },
+         { "Korsarz_7": 1 },
+         { "Korsarz_7": 1 },
+         { "Korsarz_7": 1 },
+         { "Korsarz_7": 1 },
+         { "Korsarz_7": 1 },
+        ]
+      );
+	   level.define_wave( 24 * 690 , 
+        [
+         { "Korsarz": 1, "Korsarz_7": 1 },
+         { "Korsarz": 1, "Korsarz_7": 1 },
+         { "Korsarz": 1, "Korsarz_7": 1 },
+         { "Korsarz": 1, "Korsarz_7": 1 },
+         { },
+         { },
+         { "Korsarz": 1, "Korsarz_7": 1 },
+         { },
+        ]
+      );
+
+      // definiujemy nagrody
+      // define_prizes( { "Klucz_itemu_1": liczba, "Klucz_itemu_2": liczba, ..., "Klucz_itemu_6": liczba } )
+      level.define_prizes( {
+        "Naboje 5,56 mm": 2,
+        "Karabinek": 1,
+      });
+
+      // definiujemy ilosc violek nagrody
+      level.define_violki_prize(500);
+    }
+  );
+
+  // >>>>>>>>>>
+  // LEVEL 3 >>
+  // >>>>>>>>>>
+}
+
+// //////////////////////////////
+// definicje konta na starcie gry
+// //////////////////////////////
+Account.prototype.on_start = function() {
+  debug.debug("Account on_start");
+
+  // EDYTOWALNE
+  // w nawiasie podajemy nazwe postaci ktora bedzie na starcie gry
+  var soldier = this.soldiers_factory.get('Pogromca', this.level);
+
+  // NIEEDYTOWALNE
+  this.soldiers.push(soldier);
+
+  // EDYTOWALNE
+  // (opcjonalnie) jaka bron ma miec postac zalozona na starcie gry
+ // var weapon = this.items_factory.get_weapon("Prawie oryginalny nóż szturmowy");
+ // soldier.set_weapon(weapon);
+
+  // EDYTOWALNE
+  // (opcjonalnie) jaka zbroje ma miec postac zalozona na starcie gry
+  //var armour = this.items_factory.get_armour("Skórzana kurtka");
+  //soldier.set_armour(armour);
+
+  // EDYTOWALNE
+  // OPCJONALNE
+  // jakie itemy ma miec postac w plecaku na starcie gry
+ // soldier.item_0 = this.items_factory.get_ammo("Naboje 7,62 mm");
+ // soldier.item_1 = this.items_factory.get_ammo("Naboje 7,62 mm");
+ // soldier.item_2 = this.items_factory.get_armour("Skórzana kurtka");
+ // soldier.item_3 = this.items_factory.get_item("Kapiszon");
+
+}

@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Muto - defend agains mutant hordes</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<link href="stylesheets/muto.css" rel="stylesheet" type="text/css" media="all" />
+		<script src="javascripts/modernizr.custom.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+		<!-- <script src="http://jsconsole.com/remote.js?karolcibamutodebug"></script> -->
+		<script src="javascripts/helpers.js"></script>
+		<script src="javascripts/sprite.js"></script>
+		<script src="javascripts/definitions/config.js"></script>
+		<script src="javascripts/skills.js"></script>
+		<script src="javascripts/definitions/creatures.js"></script>
+		<script src="javascripts/definitions/soldiers.js"></script>
+		<script src="javascripts/creatures.js"></script>
+		<script src="javascripts/soldiers.js"></script>
+		<script type="text/javascript">
+			window.addEventListener('load', eventWindowLoaded, false);
+			function eventWindowLoaded() {
+				canvasApp();
+				center();
+
+			}
+
+			function canvasSupport() {
+				return Modernizr.canvas;
+			}
+
+			function canvasApp() {
+				if (!canvasSupport()) {
+					return;
+				} else {
+
+					debug = {
+						trace : function() {
+						},
+						log : function() {
+						},
+						info : function() {
+						},
+						debug : function() {
+						},
+						warn : function() {
+						},
+						error : function() {
+						},
+					}
+
+					engine = {
+						running : false
+					};
+
+					var theCanvas = document.getElementById("canvas");
+					var context = theCanvas.getContext("2d");
+
+					creatures = new CreaturesFactory();
+
+					sprites = {};
+					definitions = {};
+
+					var debug_options = document.getElementById("debug_options");
+					for (var name in creatures.creatures_definitions) {
+						var definition = creatures.creatures_definitions[name];
+						definitions[name] = definition;
+						sprites[name] = definition.sprite;
+						console.log(name, definition);
+
+						var radio = document.createElement('input');
+						radio.type = "radio";
+						radio.name = "sprite";
+						radio.value = name;
+						radio.id = name;
+
+						var label = document.createElement('label')
+						label.htmlFor = name;
+						label.appendChild(document.createTextNode(name));
+
+						debug_options.appendChild(radio);
+						debug_options.appendChild(label);
+
+						radio.addEventListener('click', function() {
+							selected = sprites[this.value];
+							selected_def = definitions[this.value];
+							localStorage.selected = this.value;
+							console.log("Klik na button, wybieramy sprite", this.value, selected);
+						});
+					}
+
+					soldiers = new SoldiersFactory();
+					for (var name in soldiers.soldiers_definitions) {
+						var definition = soldiers.soldiers_definitions[name];
+						sprites[name] = definition.sprite;
+						definitions[name] = definition;
+						console.log(name, definition);
+
+						var radio = document.createElement('input');
+						radio.type = "radio";
+						radio.name = "sprite";
+						radio.value = name;
+						radio.id = name;
+
+						var label = document.createElement('label')
+						label.htmlFor = name;
+						label.appendChild(document.createTextNode(name));
+
+						debug_options.appendChild(radio);
+						debug_options.appendChild(label);
+
+						radio.addEventListener('click', function() {
+							selected = sprites[this.value];
+							selected_def = definitions[this.value];
+							localStorage.selected = this.value;
+							console.log("Klik na button, wybieramy sprite", this.value, selected);
+						});
+					}
+
+					selected = null;
+					selected_def = null;
+
+					if (localStorage.selected) {
+						selected = sprites[localStorage.selected];
+						selected_def = definitions[localStorage.selected];
+					}
+
+					document.addEventListener("keydown", function(e) {
+						if (e.keyCode == 188) {
+							if (frame == 0) {
+								return;
+							}
+							// prev
+							frame--;
+							localStorage.frame = frame;
+							draw_sprites();
+						} else if (e.keyCode == 190) {
+							// next
+							frame++;
+							localStorage.frame = frame;
+							draw_sprites();
+						}
+					}, false);
+
+					var prev_button = document.getElementById("prev_frame");
+					prev_button.addEventListener('click', function() {
+						if (frame == 0) {
+							return;
+						}
+						frame--;
+						localStorage.frame = frame;
+						draw_sprites();
+					});
+
+					var next_button = document.getElementById("next_frame");
+					next_button.addEventListener('click', function() {
+						frame++;
+						localStorage.frame = frame;
+						draw_sprites();
+					});
+
+					frame = localStorage.frame || 1;
+					frame++;
+					frame--;
+
+					function draw_sprites() {
+						canvas.width = canvas.width;
+						context.fillStyle = '#000';
+						context.strokeStyle = '#000';
+						context.fillText("Frame: " + (frame + 1), 10, 10);
+
+						var col = 0;
+						var row = 0;
+						var cell_width = 150;
+						var cell_height = 150;
+
+						var max_rows = 10;
+						// console.log(selected);
+						// console.log(selected_def);
+
+						for (var i = 0; i < selected.states.length; i++) {
+							row = i % max_rows;
+
+							var x = 10 + col * cell_width + selected.width_offset;
+							var y = row * selected.height + selected.height_offset;
+
+							var named_state = selected.states_map[i];
+							var count = selected.states[i];
+							var type = named_state.split("_")[0];
+
+							context.fillStyle = '#000';
+							context.strokeStyle = '#000';
+
+							context.fillText("Frame: " + (frame + 1) + "/" + count, 10 + col * cell_width, row * selected.height + selected.height - 20);
+							context.fillText("State: " + i, 10 + col * cell_width, row * selected.height + selected.height);
+							context.fillText("State: " + named_state, 10 + col * cell_width, row * selected.height + selected.height - 10);
+							selected.state = i;
+							selected.draw_frame(context, 10 + col * cell_width + selected.width_offset, row * selected.height + selected.height_offset, frame);
+
+							context.fillStyle = '#f00';
+							context.strokeStyle = '#f00';
+							context.fillRect(x - 1, y - 1, 2, 2)
+
+							if (selected_def[type + "_range"]) {
+								context.beginPath();
+								context.arc(x, y, selected_def[type + "_range"], 0, 2 * Math.PI, false);
+								context.lineWidth = 1;
+								context.strokeStyle = 'red';
+								context.stroke();
+							}
+
+							context.beginPath();
+							context.arc(x, y, selected_def.radius, 0, 2 * Math.PI, false);
+							context.lineWidth = 1;
+							context.strokeStyle = 'blue';
+							context.stroke();
+
+							if (row == max_rows - 1)
+								col++;
+						}
+					}
+
+					var counter = 30;
+					setTimeout(function drawer() {
+						draw_sprites();
+						if (counter--) {
+							setTimeout(drawer, 100);
+						}
+					}, 100);
+
+					last_x = 0;
+					last_y = 0;
+					function mouse_down(e) {
+						// debug.debug("called from",iface,e);
+						// that.map.mouse_down(e.clientX, e.clientY);
+						// mobilne przegladarki wysylaja czasem jakies smieci z ujemnymi wspolrzednymi
+						if (e.layerX < 0 || e.layerY < 0)
+							return;
+						var dx = e.layerX - last_x;
+						var dy = e.layerY - last_y;
+						console.log(", { ox: " + dx + ", oy: " + dy + " }");
+						last_x = e.layerX;
+						last_y = e.layerY;
+					};
+
+					var canvasDiv = document.getElementById("mapPanel");
+					var theCanvas = document.getElementById("canvas");
+					canvasDiv.addEventListener("mousedown", mouse_down, false);
+
+				}
+
+			}
+
+		</script>
+
+		<style>
+			body {
+				background: white !important;
+				color: black !important;
+			}
+			#game_map {
+				-webkit-box-shadow: none;
+				-moz-box-shadow: none;
+				position: relative !important;
+			}
+			#debug_options {
+				color: black !important;
+				width: 100%;
+				clear: both;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="debug_options">
+			<input id="prev_frame" type="button" name="sal" value="<<">
+			<input id="next_frame" type="button" name="sal" value=">>">
+		</div>
+
+		<div id="game_map">
+			<div id="mapPanel">
+				<canvas id="canvas" width="2000" height="2000">
+					Your browser does not support HTML5 Canvas.
+				</canvas>
+			</div>
+		</div>
+
+	</body>
+</html>

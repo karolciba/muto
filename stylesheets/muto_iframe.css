@@ -1,0 +1,33 @@
+#game_map {
+	position: absolute;
+	width: 1000px;
+	height: 600px;
+}
+#leftPanel {
+	position: relative;
+	float: right;
+	width: 200px;
+	height: 600px;
+}
+#mapPanel {
+	position: relative;
+	float: left;
+	width: 800px;
+	height: 600px;
+}
+#menuPanel {
+	position: relative;
+	float: left;
+	width: 800px;
+	height: 600px;
+}
+#debug_options {
+/*	position: absolute;*/
+	z-index: 1000;
+	width:126px;
+/*
+	margin-top: 10px;
+	margin-bottom: 20px;*/
+
+	color: white;
+}

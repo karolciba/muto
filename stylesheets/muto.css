@@ -1,0 +1,148 @@
+body {
+	background: url('../assets/img/bckg.jpg') no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+#game_map {
+	border-radius: 5px;
+	/*	box-shadow: -3px -3px 5px rgba(10, 10, 10, 0.25), -3px 3px 5px rgba(0, 0, 0, 0.25), 3px -3px 5px rgba(0, 0, 0, 0.25), 3px 3px 5px rgba(0, 0, 0, 0.25);*/
+	-webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.69);
+	-moz-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.69);
+	box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.69);
+	position: absolute;
+	width: 1000px;
+	height: 600px;
+}
+#leftPanel {
+	position: relative;
+	float: right;
+	width: 200px;
+	height: 600px;
+}
+#mapPanel {
+	position: relative;
+	float: left;
+	width: 800px;
+	height: 600px;
+}
+.credits {
+	background-color: black;
+	font-weight: bold;
+	font-size: 18px;
+	color: white;
+	width: 800px !important;
+	height: 600px !important;
+	overflow: hidden;
+}
+#creditsBck {
+	position: absolute;
+	top: 50px;
+	background-color: black;
+	color: white;
+	width: 800px !important;
+	height: 500px !important;
+	overflow: hidden;
+}
+#menuPanel {
+	position: relative;
+	float: left;
+	width: 800px;
+	height: 600px;
+}
+#debug_options {
+	/*	position: absolute;*/
+	z-index: 1000;
+	width: 126px;
+	/*
+	 margin-top: 10px;
+	 margin-bottom: 20px;*/
+
+	color: white;
+}
+
+#credits {
+	position: absolute;
+	top: 500px;
+	left: 42%;
+	/*
+	 animation-duration: 3s;
+	 animation-name: slidein;*/
+
+	-webkit-animation-name: slidein;
+	-webkit-animation-duration: 25s;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation-iteration-count: 1;
+	-moz-animation-name: slidein;
+	-moz-animation-duration: 45s;
+	-moz-animation-timing-function: linear;
+	-moz-animation-iteration-count: 1;
+	animation-name: slidein;
+	animation-duration: 45s;
+	animation-timing-function: linear;
+	animation-iteration-count: 1;
+}
+.center {
+	position: absolute;
+	left: 42%;
+	top: 46%;
+}
+
+@-moz-keyframes slidein {
+from {
+	top: 500px;
+}
+
+to {
+	top: -1100px;
+}
+}
+@-webkit-keyframes
+slidein {from {
+	top: 500px;
+}
+
+to {
+	top: -1030px;
+}
+}
+@keyframes
+slidein {from {
+	top: 500px;
+}
+
+to {
+	top: -1100px;
+}
+}
+.blink_me {
+	-webkit-animation-name: blinker;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-timing-function: linear;
+	-moz-animation-name: blinker;
+	-moz-animation-duration: 1s;
+	-moz-animation-timing-function: linear;
+	animation-name: blinker;
+	animation-duration: 1s;
+	animation-timing-function: linear;
+}
+
+@-moz-keyframes blinker {
+0% { opacity:  0.0; }
+50% { opacity: 0.5; }
+100% { opacity: 1.0; }
+}
+
+@-webkit-keyframes blinker {
+0% { opacity:  0.0; }
+50% { opacity: 0.5; }
+100% { opacity: 1.0; }
+}
+
+@keyframes blinker {
+0% { opacity:  0.0; }
+50% { opacity: 0.5; }
+100% { opacity: 1.0; }
+}

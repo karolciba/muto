@@ -1,0 +1,1083 @@
+function creatures_data(creatures) {
+
+  // Tworzymy nowy obiekt sprite - dla każdego sprite dla kazdego typu kreatury powinien być nowy obiekt
+  // sprite dla zdefiniowanych kreatur mozna objerzeć na stronie Muto/jsapp/public/sprites.html
+  // tam wybieramy rodzaj bota i przyciskami lub klawiszami < i >
+  // przeglądamy klatka po klatce
+  var sprite_mutant = new Sprite();
+
+  // ustawiamy adres do obrazka
+  sprite_mutant.set_image_src('assets/img/creatures/zarazony.png');
+
+  // ustawiamy wymiary klatki (tj. komórki w ktorej znajduje sie sprite_mutant)
+  // set_size(szerokość, wysokość)
+  sprite_mutant.set_size(96, 96);
+
+  // definiujemy wszyskie rodzaje animacji, w takiej kolejnosci jak sa na spitemapie
+  // define(kolejny numer wiersza, nazwa animacji, ilosc klatek)
+  // opcjonalnie na koncu dodajemy tablice z parametrami, mozliwe paramety
+  // ox - przesuniecie środka klatki
+  // oy - przesuniecie środka klatki
+  // fps - ilosc klatek na sekunde (napisuje globalne ustawienie dla sprite)
+  // define( kolejny numer wiersza, nazwa animacji, ilosc klatek, { ox: 1, oy: -1, fps: 24 } )
+  
+  // sprite_mutant.define(0,'walk_up', 11, { ox: 6, oy: -18 });
+  sprite_mutant.define(0,'walk_up', 11, { ox: -4, oy: 15, fps: 12 });
+  sprite_mutant.define(1,'walk_right', 11, { ox: -16, oy: -5 });
+  sprite_mutant.define(2,'walk_down', 11, { ox: 3, oy: -14 });
+  sprite_mutant.define(3,'walk_left', 11, { ox: 15, oy: 4 });
+  sprite_mutant.define(4,'walk_upleft', 11, { ox: 14, oy: 5 });
+  sprite_mutant.define(5,'walk_upright', 11, { ox: -4, oy: 15 });
+  sprite_mutant.define(6,'walk_downright', 11, { ox: -16, oy: -3 });
+  sprite_mutant.define(7,'walk_downleft', 11, { ox: 0, oy: -15 });
+  sprite_mutant.define(8,'natural_attack_up', 10, { ox: -4, oy: 20 });
+  sprite_mutant.define(9,'natural_attack_right', 10, { ox: -16, oy: -4 });
+  sprite_mutant.define(10,'natural_attack_down', 10, { ox: 3, oy: -15 });
+  sprite_mutant.define(11,'natural_attack_left', 10, { ox: 17, oy: 3 });
+  sprite_mutant.define(12,'natural_attack_upright', 10, { ox: -6, oy: 16 });
+  sprite_mutant.define(13,'natural_attack_downright', 10, { ox: -17, oy: -5 });
+  sprite_mutant.define(14,'natural_attack_downleft', 10, { ox: 2, oy: -16 });
+  sprite_mutant.define(15,'natural_attack_upleft', 10, { ox: 15, oy: 5 });
+  sprite_mutant.define(16,'dead_up', 9, { ox: 0, oy: 25 });
+  sprite_mutant.define(17,'dead_right', 9, { ox: -20, oy: 2 });
+  sprite_mutant.define(18,'dead_down', 9, { ox: 1, oy: -21 });
+  sprite_mutant.define(19,'dead_left', 9, { ox: 15, oy: 2 });
+  sprite_mutant.define(20,'dead_upright', 9, { ox: -8, oy: 22 });
+  sprite_mutant.define(21,'dead_downright', 9, { ox: -18, oy: -6 });
+  sprite_mutant.define(22,'dead_downleft', 9, { ox: 2, oy: -17 });
+  sprite_mutant.define(23,'dead_upleft', 9, { ox: 14, oy: 2 });
+  sprite_mutant.define(24,'stand_up', 35, { ox: -5, oy: 13 });
+  sprite_mutant.define(25,'stand_right', 35, { ox: -16, oy: -4 });
+  sprite_mutant.define(26,'stand_down', 35, { ox: 2, oy: -15 });
+  sprite_mutant.define(27,'stand_left', 35, { ox: 15, oy: 2 });
+  sprite_mutant.define(28,'stand_upright', 35, { ox: -5, oy: 15 });
+  sprite_mutant.define(29,'stand_downright', 35, { ox: -16, oy: -2 });
+  sprite_mutant.define(30,'stand_downleft', 35, { ox: 0, oy: -14 });
+  sprite_mutant.define(31,'stand_upleft', 35, { ox: 16, oy: 6 });
+  sprite_mutant.define(32,'damage_down', 6, { ox: -4, oy: 6 });
+
+
+  // definiujemy bazowa ilość klatek animacji na sekunde
+  sprite_mutant.fps(12);
+
+  // ustawiamy animacje zawsze na stand_down
+  sprite_mutant.set('stand_down');
+
+  // definiujemy kreature - najpierw "klucz", którym bedziemy się posługiwać w reszcie kodu
+  creatures.define("Mutant", {
+    // vigour postaci
+    vigour: 5, // Parametr z VF 8
+    // agility postaci
+    agility: 8, // Parametr z VF 7
+    // klucz broni postaci
+    natural_weapon: "Łapa Zarażonego",
+    // klucz zbroi postaci
+    natural_armour: "Skóra",
+    // modyfikator łatwości trafienia postaci
+    hit_modifier: 4,
+    
+    // zasięg broni naturalnej
+    natural_range: 25,
+
+    // umiejętności postaci - na podstawie typów ustawionych w broniach - klucz: wartosc_umiejetnosci
+    abilities: { martial: 2 },
+
+    // ustawiamy wcześniej zdefiniowana sprite_mutant mape
+    sprite: sprite_mutant,
+
+    // ile pikseli wzgledem środka to przestrzeń kreatury na która nie można wchodzić
+    radius: 	11, 
+
+    // ile pikseli wzroku ma bot
+    sight: 		250,
+
+    // ile pikseli słuchu ma bot
+    hearing: 	350,
+	droppings: { ammo: 0.05, health: 0.05, viols: 0.1, ttl: 15 * 24, health_add: [1,4], ammo_add: [0.1, 0.25], viols_add: [2,6] },
+
+    // kogo bot bedzie atakował (gracza zawsze)
+    opponents: [ 'Korsarz', 'Korsarz_7', 'Szczur', 'Zmutowany_gryzon' ],
+
+  });
+
+  // Tworzymy nowy obiekt sprite - dla każdego sprite dla kazdego typu kreatury powinien być nowy obiekt
+  // sprite dla zdefiniowanych kreatur mozna objerzeć na stronie Muto/jsapp/public/sprites.html
+  // tam wybieramy rodzaj bota i przyciskami lub klawiszami < i >
+  // przeglądamy klatka po klatce
+  var sprite_mutant = new Sprite();
+
+  // ustawiamy adres do obrazka
+  sprite_mutant.set_image_src('assets/img/creatures/zarazony.png');
+
+  // ustawiamy wymiary klatki (tj. komórki w ktorej znajduje sie sprite_mutant)
+  // set_size(szerokość, wysokość)
+  sprite_mutant.set_size(96, 96);
+
+  // definiujemy wszyskie rodzaje animacji, w takiej kolejnosci jak sa na spitemapie
+  // define(kolejny numer wiersza, nazwa animacji, ilosc klatek)
+  // opcjonalnie na koncu dodajemy tablice z parametrami, mozliwe paramety
+  // ox - przesuniecie środka klatki
+  // oy - przesuniecie środka klatki
+  // fps - ilosc klatek na sekunde (napisuje globalne ustawienie dla sprite)
+  // define( kolejny numer wiersza, nazwa animacji, ilosc klatek, { ox: 1, oy: -1, fps: 24 } )
+  
+  // sprite_mutant.define(0,'walk_up', 11, { ox: 6, oy: -18 });
+  sprite_mutant.define(0,'walk_up', 11, { ox: -4, oy: 15, fps: 12 });
+  sprite_mutant.define(1,'walk_right', 11, { ox: -16, oy: -5 });
+  sprite_mutant.define(2,'walk_down', 11, { ox: 3, oy: -14 });
+  sprite_mutant.define(3,'walk_left', 11, { ox: 15, oy: 4 });
+  sprite_mutant.define(4,'walk_upleft', 11, { ox: 14, oy: 5 });
+  sprite_mutant.define(5,'walk_upright', 11, { ox: -4, oy: 15 });
+  sprite_mutant.define(6,'walk_downright', 11, { ox: -16, oy: -3 });
+  sprite_mutant.define(7,'walk_downleft', 11, { ox: 0, oy: -15 });
+  sprite_mutant.define(8,'natural_attack_up', 10, { ox: -4, oy: 20 });
+  sprite_mutant.define(9,'natural_attack_right', 10, { ox: -16, oy: -4 });
+  sprite_mutant.define(10,'natural_attack_down', 10, { ox: 3, oy: -15 });
+  sprite_mutant.define(11,'natural_attack_left', 10, { ox: 17, oy: 3 });
+  sprite_mutant.define(12,'natural_attack_upright', 10, { ox: -6, oy: 16 });
+  sprite_mutant.define(13,'natural_attack_downright', 10, { ox: -17, oy: -5 });
+  sprite_mutant.define(14,'natural_attack_downleft', 10, { ox: 2, oy: -16 });
+  sprite_mutant.define(15,'natural_attack_upleft', 10, { ox: 15, oy: 5 });
+  sprite_mutant.define(16,'dead_up', 9, { ox: 0, oy: 25 });
+  sprite_mutant.define(17,'dead_right', 9, { ox: -20, oy: 2 });
+  sprite_mutant.define(18,'dead_down', 9, { ox: 1, oy: -21 });
+  sprite_mutant.define(19,'dead_left', 9, { ox: 15, oy: 2 });
+  sprite_mutant.define(20,'dead_upright', 9, { ox: -8, oy: 22 });
+  sprite_mutant.define(21,'dead_downright', 9, { ox: -18, oy: -6 });
+  sprite_mutant.define(22,'dead_downleft', 9, { ox: 2, oy: -17 });
+  sprite_mutant.define(23,'dead_upleft', 9, { ox: 14, oy: 2 });
+  sprite_mutant.define(24,'stand_up', 35, { ox: -5, oy: 13 });
+  sprite_mutant.define(25,'stand_right', 35, { ox: -16, oy: -4 });
+  sprite_mutant.define(26,'stand_down', 35, { ox: 2, oy: -15 });
+  sprite_mutant.define(27,'stand_left', 35, { ox: 15, oy: 2 });
+  sprite_mutant.define(28,'stand_upright', 35, { ox: -5, oy: 15 });
+  sprite_mutant.define(29,'stand_downright', 35, { ox: -16, oy: -2 });
+  sprite_mutant.define(30,'stand_downleft', 35, { ox: 0, oy: -14 });
+  sprite_mutant.define(31,'stand_upleft', 35, { ox: 16, oy: 6 });
+  sprite_mutant.define(32,'damage_down', 6, { ox: -4, oy: 6 });
+
+
+  // definiujemy bazowa ilość klatek animacji na sekunde
+  sprite_mutant.fps(12);
+
+  // ustawiamy animacje zawsze na stand_down
+  sprite_mutant.set('stand_down');
+
+  // definiujemy kreature - najpierw "klucz", którym bedziemy się posługiwać w reszcie kodu
+  creatures.define("Mutant_do_mapy_z_fabryką_na_prośbę_Karola_Ciby_Z_Domu_Ciba", {
+    // vigour postaci
+    vigour: 4, // Parametr z VF 8
+    // agility postaci
+    agility: 7, // Parametr z VF 7
+    // klucz broni postaci
+    natural_weapon: "Łapa Zarażonego",
+    // klucz zbroi postaci
+    natural_armour: "Skóra",
+    // modyfikator łatwości trafienia postaci
+    hit_modifier: 5,
+    
+    // zasięg broni naturalnej
+    natural_range: 25,
+
+    // umiejętności postaci - na podstawie typów ustawionych w broniach - klucz: wartosc_umiejetnosci
+    abilities: { martial: 3 },
+
+    // ustawiamy wcześniej zdefiniowana sprite_mutant mape
+    sprite: sprite_mutant,
+
+    // ile pikseli wzgledem środka to przestrzeń kreatury na która nie można wchodzić
+    radius: 	11, 
+
+    // ile pikseli wzroku ma bot
+    sight: 		250,
+
+    // ile pikseli słuchu ma bot
+    hearing: 	350,
+	droppings: { ammo: 0.05, health: 0.15, viols: 0.2, ttl: 15 * 24, health_add: [1,4], ammo_add: [0.1, 0.25], viols_add: [2,6] },
+
+    // kogo bot bedzie atakował (gracza zawsze)
+    opponents: [ 'Korsarz', 'Korsarz_7', 'Szczur', 'Zmutowany_gryzon' ],
+
+  });
+  
+  var sprite_szczur = new Sprite();
+
+  // ustawiamy adres do obrazka
+  sprite_szczur.set_image_src('assets/img/creatures/szczur.png');
+
+  // ustawiamy wymiary klatki (tj. komórki w której znajduje sie sprite_szczur)
+  // set_size(szerokość, wysokość)
+  sprite_szczur.set_size(96, 96);
+
+  // definiujemy wszyskie rodzaje animacji, w takiej kolejności jak są na spitemapie
+  // define(kolejny numer wiersza, nazwa animacji, ilość klatek)
+  
+  sprite_szczur.define(0,'walk_up', 10, { ox: -1, oy: 6 });
+  sprite_szczur.define(1,'walk_right', 10, { ox: 0, oy: 6 });
+  sprite_szczur.define(2,'walk_down', 10, { ox: 0, oy: 6 });
+  sprite_szczur.define(3,'walk_left', 10, { ox: 0, oy: 6 });
+  sprite_szczur.define(4,'walk_upright', 10, { ox: 1, oy: 7 });
+  sprite_szczur.define(5,'walk_downright', 10, { ox: -1, oy: 9 });
+  sprite_szczur.define(6,'walk_downleft', 10, { ox: -4, oy: 5 });
+  sprite_szczur.define(7,'walk_upleft', 10, { ox: 0, oy: 3 });
+  sprite_szczur.define(8,'natural_attack_up', 9, { ox: -1, oy: 7 });
+  sprite_szczur.define(9,'natural_attack_right', 9, { ox: -2, oy: 6 });
+  sprite_szczur.define(10,'natural_attack_down', 9, { ox: 0, oy: 6 });
+  sprite_szczur.define(11,'natural_attack_left', 9, { ox: 0, oy: 6 });
+  sprite_szczur.define(12,'natural_attack_upright', 9, { ox: 2, oy: 8 });
+  sprite_szczur.define(13,'natural_attack_downright', 9, { ox: -3, oy: 8 });
+  sprite_szczur.define(14,'natural_attack_downleft', 9, { ox: -2, oy: 4 });
+  sprite_szczur.define(15,'natural_attack_upleft', 9, { ox: 1, oy: 3 });
+  sprite_szczur.define(16,'dead_up', 8, { ox: -1, oy: 5 });
+  sprite_szczur.define(17,'dead_right', 8, { ox: -2, oy:6 });
+  sprite_szczur.define(18,'dead_down', 8, { ox: 0, oy: 4 });
+  sprite_szczur.define(19,'dead_left', 8, { ox: -2, oy: 7 });
+  sprite_szczur.define(20,'dead_upright', 8, { ox: 2, oy: 8 });
+  sprite_szczur.define(21,'dead_downright', 8, { ox: -5, oy: 7 });
+  sprite_szczur.define(22,'dead_downleft', 8, { ox: -4, oy: 6 });
+  sprite_szczur.define(23,'dead_upleft', 8, { ox: 0, oy: 2 });
+  sprite_szczur.define(24,'stand_upright', 28, { ox: 2, oy: 8 });
+  sprite_szczur.define(25,'stand_downright', 28, { ox: -2, oy: 10 });
+  sprite_szczur.define(26,'stand_downleft', 28, { ox: -4, oy: 5 });
+  sprite_szczur.define(27,'stand_upleft', 28, { ox: 1, oy: 4 });
+  sprite_szczur.define(28,'stand_up', 28, { ox: 0, oy: 6 });
+  sprite_szczur.define(29,'stand_right', 28, { ox: -2, oy: 6 });
+  sprite_szczur.define(30,'stand_down', 28, { ox: 1, oy: 6 });
+  sprite_szczur.define(31,'stand_left', 28, { ox: 0, oy: 7 });
+  sprite_szczur.define(32,'damage_down', 6, { ox: -1, oy: 0 });
+ 
+
+  // definiujemy bazowa ilosc klatek animacji na sekunde
+  sprite_szczur.fps(12);
+
+  // ustawiamy animacje zawsze na stand_down
+  sprite_szczur.set('stand_down');
+
+  creatures.define("Szczur", {
+    vigour: 3,
+    agility: 14,
+    natural_weapon: "Pazury",
+    natural_armour: "Futro",
+    hit_modifier: -2,
+    natural_range: 6,
+
+    abilities: { martial: 2 },
+
+    sprite: sprite_szczur,
+    radius: 	6,
+    sight: 		100,
+    hearing: 	200,
+	
+	droppings: { ammo: 0.00, health: 0.05, viols: 0.05, ttl: 15 * 24, health_add: [1,4], ammo_add: [0.0, 0.0], viols_add: [1,3] },
+	opponents: [ 'Korsarz', 'Korsarz_7' ],
+  });
+ 
+ var sprite_korsarz = new Sprite();
+
+  // ustawiamy adres do obrazka
+  sprite_korsarz.set_image_src('assets/img/creatures/korsarz.png');
+
+  // ustawiamy wymiary klatki (tj. komorki w ktorej znajduje sie sprite_szczur)
+  // set_size(szerokosc, wysokosc)
+  sprite_korsarz.set_size(96, 96);
+
+  // definiujemy wszyskie rodzaje animacji, w takiej kolejności jak są na spitemapie
+  // define( kolejny numer wiersza, nazwa animacji, ilość klatek )
+  
+  sprite_korsarz.define(0,'walk_up', 12, { ox: 1, oy: 1});
+  sprite_korsarz.define(1,'walk_right', 12, { ox: -2, oy: 0 });
+  sprite_korsarz.define(2,'walk_down', 12, { ox: -3, oy: -2 });
+  sprite_korsarz.define(3,'walk_left', 12, { ox: -2, oy: -3 });
+  sprite_korsarz.define(4,'walk_upright', 12, { ox: -2, oy: -1 });
+  sprite_korsarz.define(5,'walk_downright', 12, { ox: -2, oy: -3 });
+  sprite_korsarz.define(6,'walk_downleft', 12, { ox: -2, oy: -2 });
+  sprite_korsarz.define(7,'walk_upleft', 12, { ox: -1, oy: -1 });
+  sprite_korsarz.define(8,'stand_up', 17, { ox: -1, oy: 0});
+  sprite_korsarz.define(9,'stand_right', 17, { ox: -3, oy: 0 });
+  sprite_korsarz.define(10,'stand_down', 17, { ox: -4, oy: -2 });
+  sprite_korsarz.define(11,'stand_left', 17, { ox: -2, oy: -2 });
+  sprite_korsarz.define(12,'stand_upright', 17, { ox:0, oy: 0});
+  sprite_korsarz.define(13,'stand_downright', 17, { ox: -3, oy: 1 });
+  sprite_korsarz.define(14,'stand_downleft', 17, { ox: -4, oy: -3 });
+  sprite_korsarz.define(15,'stand_upleft', 17, { ox: -1, oy: -4 });
+  sprite_korsarz.define(16,'natural_attack_up', 10);
+  sprite_korsarz.define(17,'natural_attack_right', 10, { ox: -4, oy: 0 });
+  sprite_korsarz.define(18,'natural_attack_down', 10, { ox: -3, oy: -3 });
+  sprite_korsarz.define(19,'natural_attack_left', 10, { ox: -1, oy: -3 });
+  sprite_korsarz.define(20,'natural_attack_upright', 10);
+  sprite_korsarz.define(21,'natural_attack_downright', 10, { ox: -4, oy: -1 });
+  sprite_korsarz.define(22,'natural_attack_downleft', 10, { ox: -3, oy: -3 });
+  sprite_korsarz.define(23,'natural_attack_upleft', 10, { ox: 0, oy: -2 });
+  sprite_korsarz.define(24,'dead_up', 15, { ox: 1, oy: 3 });
+  sprite_korsarz.define(25,'dead_right', 15, { ox: -2, oy: 1 });
+  sprite_korsarz.define(26,'dead_down', 15, { ox: -1, oy: -1 });
+  sprite_korsarz.define(27,'dead_left', 15, { ox: 1, oy: -1 });
+  sprite_korsarz.define(28,'dead_upright', 15, { ox: -1, oy: 1 });
+  sprite_korsarz.define(29,'dead_downright', 15, { ox: -1, oy: -1 });
+  sprite_korsarz.define(30,'dead_downleft', 15, { ox: 0, oy: -1 });
+  sprite_korsarz.define(31,'dead_upleft', 15, { ox: 1, oy: 0 });
+  sprite_korsarz.define(32,'damage_down', 6, { ox: -1, oy: -3 });
+ 
+
+  // definiujemy bazowa ilość klatek animacji na sekunde
+  sprite_korsarz.fps(12);
+
+  // ustawiamy animacje zawsze na stand_down
+  sprite_korsarz.set('stand_down');
+
+  creatures.define("Korsarz", {
+    vigour: 8, // było 10
+    agility: 13,
+    natural_weapon: "Kordelas",
+    natural_armour: "Skórzana kurtka",
+    hit_modifier: 0,
+    natural_range: 20,
+
+    abilities: { cut: 1, martial: 1},
+
+    sprite: sprite_korsarz,
+    radius: 	12,
+    sight: 		275,
+	hearing: 	300,
+	
+	droppings: { ammo: 0.01, health: 0.15, viols: 0.1, ttl: 15 * 24, health_add: [4,8], ammo_add: [0.2, 0.35], viols_add: [1,5] },
+	opponents: [ 'Szczur', "Zmutowany_gryzon", 'Mutant', 'Mutant_do_mapy_z_fabryką_na_prośbę_Karola_Ciby_Z_Domu_Ciba' ],
+  });
+  
+  var sprite_korsarz_7 = new Sprite();
+
+  // ustawiamy adres do obrazka
+  sprite_korsarz_7.set_image_src('assets/img/creatures/korsarz_7.png');
+
+  // ustawiamy wymiary klatki (tj. komórki w ktorej znajduje się sprite_szczur)
+  // set_size(szerokość, wysokość)
+  sprite_korsarz_7.set_size(96, 96);
+
+  // definiujemy wszyskie rodzaje animacji, w takiej kolejnosci jak są na spitemapie
+  // define(kolejny numer wiersza, nazwa animacji, ilosc klatek )
+  
+  sprite_korsarz_7.define(0,'walk_up', 12, { ox: 1, oy: 1});
+  sprite_korsarz_7.define(1,'walk_right', 12, { ox: -2, oy: 0 });
+  sprite_korsarz_7.define(2,'walk_down', 12, { ox: -3, oy: -2 });
+  sprite_korsarz_7.define(3,'walk_left', 12, { ox: -2, oy: -3 });
+  sprite_korsarz_7.define(4,'walk_upright', 12, { ox: -2, oy: -1 });
+  sprite_korsarz_7.define(5,'walk_downright', 12, { ox: -2, oy: -3 });
+  sprite_korsarz_7.define(6,'walk_downleft', 12, { ox: -2, oy: -2 });
+  sprite_korsarz_7.define(7,'walk_upleft', 12, { ox: -1, oy: -1 });
+  sprite_korsarz_7.define(8,'stand_up', 17, { ox: -1, oy: 0});
+  sprite_korsarz_7.define(9,'stand_right', 17, { ox: -3, oy: 0 });
+  sprite_korsarz_7.define(10,'stand_down', 17, { ox: -4, oy: -2 });
+  sprite_korsarz_7.define(11,'stand_left', 17, { ox: -2, oy: -2 });
+  sprite_korsarz_7.define(12,'stand_upright', 17, { ox:0, oy: 0});
+  sprite_korsarz_7.define(13,'stand_downright', 17, { ox: -3, oy: 1 });
+  sprite_korsarz_7.define(14,'stand_downleft', 17, { ox: -4, oy: -3 });
+  sprite_korsarz_7.define(15,'stand_upleft', 17, { ox: -1, oy: -4 });
+  sprite_korsarz_7.define(16,'natural_attack_up', 9);
+  sprite_korsarz_7.define(17,'natural_attack_right', 9, { ox: -4, oy: 0 });
+  sprite_korsarz_7.define(18,'natural_attack_down', 9, { ox: -3, oy: -3 });
+  sprite_korsarz_7.define(19,'natural_attack_left', 9, { ox: -2, oy: -3 });
+  sprite_korsarz_7.define(20,'natural_attack_upright', 9);
+  sprite_korsarz_7.define(21,'natural_attack_downright', 10, { ox: -4, oy: -1 });
+  sprite_korsarz_7.define(22,'natural_attack_downleft', 9, { ox: -4, oy: -5 });
+  sprite_korsarz_7.define(23,'natural_attack_upleft', 10, { ox: 0, oy: -2 });
+  sprite_korsarz_7.define(24,'dead_up', 15, { ox: 1, oy: 3 });
+  sprite_korsarz_7.define(25,'dead_right', 15, { ox: -2, oy: 1 });
+  sprite_korsarz_7.define(26,'dead_down', 15, { ox: -1, oy: -1 });
+  sprite_korsarz_7.define(27,'dead_left', 15, { ox: 1, oy: -1 });
+  sprite_korsarz_7.define(28,'dead_upright', 15, { ox: -1, oy: 1 });
+  sprite_korsarz_7.define(29,'dead_downright', 15, { ox: -1, oy: -1 });
+  sprite_korsarz_7.define(30,'dead_downleft', 15, { ox: 0, oy: -1 });
+  sprite_korsarz_7.define(31,'dead_upleft', 15, { ox: 1, oy: 0 });
+  sprite_korsarz_7.define(32,'damage_down', 6, { ox: -1, oy: -3 });
+ 
+
+  // definiujemy bazowa ilosc klatek animacji na sekunde
+  sprite_korsarz_7.fps(12);
+
+  // ustawiamy animacje zawsze na stand_down
+  sprite_korsarz_7.set('stand_down');
+
+  creatures.define("Korsarz_7", {
+    vigour: 11,
+    agility: 13,
+	perception: 14,
+    natural_weapon: "Nowak-3",
+    natural_armour: "Skórzana kurtka",
+    hit_modifier: 0,
+
+    abilities: { cut: 1, martial: 2, pistol: 2},
+
+    sprite: sprite_korsarz_7,
+    radius: 	12,
+    sight: 		300,
+	hearing: 	320,
+	
+	droppings: { ammo: 0.15, health: 0.05, viols: 0.05, ttl: 15 * 24, health_add: [4,8], ammo_add: [0.25, 0.5], viols_add: [1,5] },
+	opponents: [ 'Szczur', 'Zmutowany_gryzon', 'Mutant' ],
+   });
+
+  var sprite_reptilian = new Sprite();
+
+  // ustawiamy adres do obrazka
+  sprite_reptilian.set_image_src('assets/img/creatures/reptilian.png');
+
+  // ustawiamy wymiary klatki (tj. komorki w ktorej znajduje sie sprite_szczur)
+  // set_size(szerokosc, wysokosc)
+  sprite_reptilian.set_size(96, 96);
+
+  // definiujemy wszyskie rodzaje animacji, w takiej kolejnosci jak sa na spitemapie
+  // define( kolejny numer wiersza, nazwa animacji, ilosc klatek )
+  
+  sprite_reptilian.define(0,'walk_up', 12, { ox: 0, oy: 9 });
+  sprite_reptilian.define(1,'walk_right', 12, { ox: -9, oy: 0 });
+  sprite_reptilian.define(2,'walk_down', 12, { ox: 0, oy: -9 });
+  sprite_reptilian.define(3,'walk_left', 12, { ox: 9, oy: 0 });
+  sprite_reptilian.define(4,'walk_upright', 12, { ox: 0, oy: 8 });
+  sprite_reptilian.define(5,'walk_downright', 12, { ox: -8, oy: 0 });
+  sprite_reptilian.define(6,'walk_downleft', 12, { ox: 0, oy: -8 });
+  sprite_reptilian.define(7,'walk_upleft', 12, { ox: 8, oy: 0 });
+  sprite_reptilian.define(8,'natural_attack_up', 11, { ox: 0, oy: 6 });
+  sprite_reptilian.define(9,'natural_attack_right', 11, { ox: -6, oy: 0 });
+  sprite_reptilian.define(10,'natural_attack_down', 11, { ox: 0, oy: -6 });
+  sprite_reptilian.define(11,'natural_attack_left', 11, { ox: 6, oy: 0 });
+  sprite_reptilian.define(12,'natural_attack_upright', 11, { ox: 4, oy: 8 });
+  sprite_reptilian.define(13,'natural_attack_downright', 11, { ox: -8, oy: 4 });
+  sprite_reptilian.define(14,'natural_attack_downleft', 11, { ox: -4, oy: -8 });
+  sprite_reptilian.define(15,'natural_attack_upleft', 11, { ox: 10, oy: -2 });
+  sprite_reptilian.define(16,'dead_up', 8, { ox: 0, oy: 11 });
+  sprite_reptilian.define(17,'dead_right', 8, { ox: -10, oy: 3 });
+  sprite_reptilian.define(18,'dead_down', 8, { ox: 0, oy: -5 });
+  sprite_reptilian.define(19,'dead_left', 8, { ox: 8, oy: 2 });
+  sprite_reptilian.define(20,'dead_upright', 8, { ox: 0, oy: 10 });
+  sprite_reptilian.define(21,'dead_downright', 8, { ox: -8, oy: 2 });
+  sprite_reptilian.define(22,'dead_downleft', 8, { ox: -2, oy: -5 });
+  sprite_reptilian.define(23,'dead_upleft', 8, { ox: 7, oy: 0 });
+  sprite_reptilian.define(24,'stand_up', 13, { ox: 1, oy: 9 });
+  sprite_reptilian.define(25,'stand_right', 13, { ox: -9, oy: 2 });
+  sprite_reptilian.define(26,'stand_down', 13, { ox: 0, oy: -7 });
+  sprite_reptilian.define(27,'stand_left', 13, { ox: 7, oy: 2 });
+  sprite_reptilian.define(28,'stand_upright', 13, { ox: 3, oy: 10 });
+  sprite_reptilian.define(29,'stand_downright', 13, { ox: -10, oy: 3 });
+  sprite_reptilian.define(30,'stand_downleft', 13, { ox: 0, oy: -6 });
+  sprite_reptilian.define(31,'stand_upleft', 13, { ox: 6, oy: 2 });
+  sprite_reptilian.define(32,'damage_down', 6, { ox: 0, oy: 0 }); 
+
+  // definiujemy bazowa ilosc klatek animacji na sekunde
+  sprite_reptilian.fps(12);
+
+  // ustawiamy animacje zawsze na stand_down
+  sprite_reptilian.set('stand_down');
+
+  creatures.define("Reptilian", {
+    vigour: 14,
+    agility: 12,
+    natural_weapon: "Pazury",
+    natural_armour: "Skóra",
+    hit_modifier: 0,
+    natural_range: 20,
+
+    abilities: { martial: 3 },
+
+    sprite: sprite_reptilian,
+    radius: 	13,
+    sight: 	25,
+    hearing: 	200,
+	  });
+	  
+	  var sprite_zmutowany_gryzon = new Sprite();
+
+  // ustawiamy adres do obrazka
+  sprite_zmutowany_gryzon.set_image_src('assets/img/creatures/szczur.png');
+
+  // ustawiamy wymiary klatki (tj. komorki w ktorej znajduje sie sprite_szczur)
+  // set_size(szerokosc, wysokosc)
+  sprite_zmutowany_gryzon.set_size(96, 96);
+
+  // definiujemy wszyskie rodzaje animacji, w takiej kolejnosci jak sa na spitemapie
+  // define( kolejny numer wiersza, nazwa animacji, ilosc klatek )
+  
+  sprite_zmutowany_gryzon.define(0,'walk_up', 10, { ox: -1, oy: 5 });
+  sprite_zmutowany_gryzon.define(1,'walk_right', 10, { ox: -1, oy: 5 });
+  sprite_zmutowany_gryzon.define(2,'walk_down', 10, { ox: -1, oy: 6 });
+  sprite_zmutowany_gryzon.define(3,'walk_left', 10, { ox: -2, oy: 6 });
+  sprite_zmutowany_gryzon.define(4,'walk_upright', 10, { ox: 3, oy: 6 });
+  sprite_zmutowany_gryzon.define(5,'walk_downright', 10, { ox: -3, oy: 8 });
+  sprite_zmutowany_gryzon.define(6,'walk_downleft', 10, { ox: -2, oy: 3 });
+  sprite_zmutowany_gryzon.define(7,'walk_upleft', 10, { ox: 0, oy: 2 });
+  sprite_zmutowany_gryzon.define(8,'natural_attack_up', 9, { ox: -1, oy: 6 });
+  sprite_zmutowany_gryzon.define(9,'natural_attack_right', 9, { ox: -2, oy: 6 });
+  sprite_zmutowany_gryzon.define(10,'natural_attack_down', 9, { ox: 0, oy: 6 });
+  sprite_zmutowany_gryzon.define(11,'natural_attack_left', 9, { ox: -1, oy: 6 });
+  sprite_zmutowany_gryzon.define(12,'natural_attack_upright', 9, { ox: 1, oy: 8 });
+  sprite_zmutowany_gryzon.define(13,'natural_attack_downright', 9, { ox: -5, oy: 7 });
+  sprite_zmutowany_gryzon.define(14,'natural_attack_downleft', 9, { ox: -3, oy: 5 });
+  sprite_zmutowany_gryzon.define(15,'natural_attack_upleft', 9, { ox: 1, oy: 3 });
+  sprite_zmutowany_gryzon.define(16,'dead_up', 8, { ox: -3, oy: 5 });
+  sprite_zmutowany_gryzon.define(17,'dead_right', 8, { ox: -3, oy: 4 });
+  sprite_zmutowany_gryzon.define(18,'dead_down', 8, { ox: -2, oy: 4 });
+  sprite_zmutowany_gryzon.define(19,'dead_left', 8, { ox: -2, oy: 5 });
+  sprite_zmutowany_gryzon.define(20,'dead_upright', 8, { ox: 0, oy: 7 });
+  sprite_zmutowany_gryzon.define(21,'dead_downright', 8, { ox: -5, oy: 7 });
+  sprite_zmutowany_gryzon.define(22,'dead_downleft', 8, { ox: -4, oy: 2 });
+  sprite_zmutowany_gryzon.define(23,'dead_upleft', 8, { ox: 0, oy: 2 });
+  sprite_zmutowany_gryzon.define(24,'stand_upright', 28, { ox: 1, oy: 7 });
+  sprite_zmutowany_gryzon.define(25,'stand_downright', 28, { ox: -4, oy: 8 });
+  sprite_zmutowany_gryzon.define(26,'stand_downleft', 28, { ox: -5, oy: 2 });
+  sprite_zmutowany_gryzon.define(27,'stand_upleft', 28, { ox: 0, oy: 3 });
+  sprite_zmutowany_gryzon.define(28,'stand_up', 28, { ox: -3, oy: 5 });
+  sprite_zmutowany_gryzon.define(29,'stand_right', 28, { ox: -3, oy: 4 });
+  sprite_zmutowany_gryzon.define(30,'stand_down', 28, { ox: 0, oy: 4 });
+  sprite_zmutowany_gryzon.define(31,'stand_left', 28, { ox: -1, oy: 6 });
+  sprite_zmutowany_gryzon.define(32,'damage_down', 6, { ox: -4, oy: 0 });
+ 
+
+  // definiujemy bazowa ilosc klatek animacji na sekunde
+  sprite_zmutowany_gryzon.fps(12);
+
+  // ustawiamy animacje zawsze na stand_down
+  sprite_zmutowany_gryzon.set('stand_down');
+
+  creatures.define("Zmutowany_gryzon", {
+    vigour: 2,
+    agility: 12,
+    natural_weapon: "Pazury",
+    natural_armour: "Futro",
+    hit_modifier: 3,
+    natural_range: 7,
+
+    abilities: { martial: 0 },
+
+    sprite: sprite_zmutowany_gryzon,
+    radius: 	7,
+    sight: 		70,
+    hearing: 	150,
+	opponents: [ 'Korsarz', 'Korsarz_7', 'Mutant' ],
+
+    // prawdopodobieństwa wypadajek
+    // jesli suma < 1 to znaczy, że nie zawsze coś wypadnie
+    // np. ammo: 0.33 + health: 0.33 + viols: 0.34 = 1 - zawsze coś wypadnie
+    // np. ammo: 0.2 + health: 0.2 + viols: 0.2 = 0.6 - 60% ze coś wypadnie
+    // np. ammo: 0 + health: 0.5 + viols: 0 = 0.5 - 50 % szans ze wypadnie zycie
+    // ttl mozna nie ustawiać, wtedy będzie brane z configu
+    // *_add, mozna nie ustawiac, bedzie brane z configu
+    droppings: { ammo: 0.00, health: 0.05, viols: 0.05, ttl: 15 * 24, health_add: [1,4], ammo_add: [0.0, 0.0], viols_add: [1,3] }
+  });
+  
+   var sprite_krol_korsarzy = new Sprite();
+
+  // ustawiamy adres do obrazka
+  sprite_krol_korsarzy.set_image_src('assets/img/creatures/krol_korsarzy.png');
+
+  // ustawiamy wymiary klatki (tj. komórki w której znajduje sie sprite_szczur)
+  // set_size(szerokość, wysokość)
+  sprite_krol_korsarzy.set_size(96, 96);
+
+  // definiujemy wszyskie rodzaje animacji, w takiej kolejnosci jak sa na spitemapie
+  // define( kolejny numer wiersza, nazwa animacji, ilosc klatek )
+  
+  sprite_krol_korsarzy.define(0,'walk_up', 12, { ox: 0, oy: 2 });
+  sprite_krol_korsarzy.define(1,'walk_right', 12, { ox: -2, oy: 0 });
+  sprite_krol_korsarzy.define(2,'walk_down', 12, { ox: 0, oy: -2 });
+  sprite_krol_korsarzy.define(3,'walk_left', 12, { ox: 2, oy: 0 });
+  sprite_krol_korsarzy.define(4,'walk_upright', 12, { ox: 1, oy: 3 });
+  sprite_krol_korsarzy.define(5,'walk_downright', 12, { ox: -4, oy: 0 });
+  sprite_krol_korsarzy.define(6,'walk_downleft', 12, { ox: -1, oy: -3 });
+  sprite_krol_korsarzy.define(7,'walk_upleft', 12, { ox: 2, oy: 1 });
+  sprite_krol_korsarzy.define(8,'natural_attack_up', 22, { ox: 1, oy: -1 });
+  sprite_krol_korsarzy.define(9,'natural_attack_right', 22, { ox: 2, oy: 1 });
+  sprite_krol_korsarzy.define(10,'natural_attack_down', 22, { ox: 0, oy: -5 });
+  sprite_krol_korsarzy.define(11,'natural_attack_left', 22, { ox: 3, oy: -2 });
+  sprite_krol_korsarzy.define(12,'natural_attack_upright', 22, { ox: 3, oy: 2 });
+  sprite_krol_korsarzy.define(13,'natural_attack_downright', 22, { ox: -1, oy: 1 });
+  sprite_krol_korsarzy.define(14,'natural_attack_downleft', 22, { ox: -2, oy: -2 });
+  sprite_krol_korsarzy.define(15,'natural_attack_upleft', 22, { ox: 0, oy: -2 });
+  sprite_krol_korsarzy.define(16,'dead_up', 43, { ox: 0, oy: 8 });
+  sprite_krol_korsarzy.define(17,'dead_right', 43, { ox: -7, oy: 2 });
+  sprite_krol_korsarzy.define(18,'dead_down', 43, { ox: -2, oy: -10 });
+  sprite_krol_korsarzy.define(19,'dead_left', 43, { ox: 8, oy: -2 });
+  sprite_krol_korsarzy.define(20,'dead_upright', 43, { ox: -3, oy: 7 });
+  sprite_krol_korsarzy.define(21,'dead_downright', 43, { ox: -7, oy: -4 });
+  sprite_krol_korsarzy.define(22,'dead_downleft', 43, { ox: 2, oy: -9 });
+  sprite_krol_korsarzy.define(23,'dead_upleft', 43, { ox: 7, oy: 2 });
+  sprite_krol_korsarzy.define(24,'stand_up', 40, { ox: 1, oy: 1 });
+  sprite_krol_korsarzy.define(25,'stand_right', 40, { ox: -1, oy: 1 });
+  sprite_krol_korsarzy.define(26,'stand_down', 40, { ox: -1, oy: -3 });
+  sprite_krol_korsarzy.define(27,'stand_left', 40, { ox: 2, oy: 0 });
+  sprite_krol_korsarzy.define(28,'stand_upright', 40, { ox: 1, oy: 1 });
+  sprite_krol_korsarzy.define(29,'stand_downright', 40, { ox: -2, oy: 2 });
+  sprite_krol_korsarzy.define(30,'stand_downleft', 40, { ox: -3, oy: -3 });
+  sprite_krol_korsarzy.define(31,'stand_upleft', 40, { ox: 3, oy: -3 });
+  sprite_krol_korsarzy.define(32,'damage_down', 6);
+
+  // definiujemy bazowa ilosc klatek animacji na sekunde
+  sprite_krol_korsarzy.fps(12);
+
+  // ustawiamy animacje zawsze na stand_down
+  sprite_krol_korsarzy.set('stand_down');
+
+  creatures.define("Król Korsarzy", {
+    vigour: 17,
+    agility: 14,
+    natural_weapon: "Bliźniacze kordelasy",
+    natural_armour: "Ciężki kirys",
+    hit_modifier: 0,
+    natural_range: 45,
+
+    abilities: { martial: 5 },
+
+    sprite: sprite_krol_korsarzy,
+    radius: 	16,
+    sight: 		440,
+    hearing: 	300,
+   });
+	  
+	    var sprite_pandora = new Sprite();
+
+  // ustawiamy adres do obrazka
+  sprite_pandora.set_image_src('assets/img/creatures/pandora.png');
+
+  // ustawiamy wymiary klatki (tj. komórki w której znajduje sie sprite_szczur)
+  // set_size(szerokość, wysokość)
+  sprite_pandora.set_size(96, 96);
+
+  // definiujemy wszyskie rodzaje animacji, w takiej kolejnosci jak sa na spitemapie
+  // define( kolejny numer wiersza, nazwa animacji, ilosc klatek )
+  
+  sprite_pandora.define(0,'walk_up', 8, { ox: 0, oy: 0 });
+  sprite_pandora.define(1,'walk_right', 8, { ox: 0, oy: 0 });
+  sprite_pandora.define(2,'walk_down', 8, { ox: 0, oy: 0 });
+  sprite_pandora.define(3,'walk_left', 8, { ox: 1, oy: 0 });
+  sprite_pandora.define(4,'walk_upright', 8, { ox: 0, oy: 2 });
+  sprite_pandora.define(5,'walk_downright', 8, { ox: -2, oy: 0 });
+  sprite_pandora.define(6,'walk_downleft', 8, { ox: 0, oy: -2 });
+  sprite_pandora.define(7,'walk_upleft', 8, { ox: 2, oy: 0 });
+  sprite_pandora.define(8,'attack-dead_up', 23, { ox: 0, oy: 0 });
+  sprite_pandora.define(9,'attack-dead_right', 23, { ox: 0, oy: 0 });
+  sprite_pandora.define(10,'attack-dead_down', 23, { ox: 0, oy: 0 });
+  sprite_pandora.define(11,'attack-dead_left', 23, { ox: 0, oy: 0 });
+  sprite_pandora.define(12,'attack-dead_upright', 23, { ox: 0, oy: 0 });
+  sprite_pandora.define(13,'attack-dead_downright', 23, { ox: 0, oy: 0 });
+  sprite_pandora.define(14,'attack-dead_downleft', 23, { ox: 0, oy: 0 });
+  sprite_pandora.define(15,'attack-dead_upleft', 23, { ox: 0, oy: 0 });
+  sprite_pandora.define(16,'stand_up', 30, { ox: 0, oy: 0 });
+  sprite_pandora.define(17,'stand_right', 30, { ox: 0, oy: 0 });
+  sprite_pandora.define(18,'stand_down', 30, { ox: 0, oy: 0 });
+  sprite_pandora.define(19,'stand_left', 30, { ox: 0, oy: 0 });
+  sprite_pandora.define(20,'stand_upright', 30, { ox: 1, oy: 1 });
+  sprite_pandora.define(21,'stand_downright', 30, { ox: -1, oy: 1 });
+  sprite_pandora.define(22,'stand_downleft', 30, { ox: -1, oy: -1 });
+  sprite_pandora.define(23,'stand_upleft', 30, { ox: 1, oy: -1 });
+  sprite_pandora.define(24,'damage', 5, {ox: 0, oy: 2});
+
+  // definiujemy bazowa ilosc klatek animacji na sekunde
+  sprite_pandora.fps(12);
+
+  // ustawiamy animacje zawsze na stand_down
+  sprite_pandora.set('stand_down');
+
+  creatures.define("Pandora", {
+    vigour: 3,
+    agility: 3,
+    natural_weapon: "",
+    natural_armour: "",
+    hit_modifier: 3,
+    natural_range: 15,
+
+    abilities: { martial: 3},
+
+    sprite: sprite_pandora,
+    radius: 	8,
+    sight: 		10,
+    hearing: 	10,
+	  });
+	  
+	   var sprite_reptoludz = new Sprite();
+
+  // ustawiamy adres do obrazka
+  sprite_reptoludz.set_image_src('assets/img/creatures/reptoludz.png');
+
+  // ustawiamy wymiary klatki (tj. komórki w której znajduje sie sprite_szczur)
+  // set_size(szerokość, wysokość)
+  sprite_reptoludz.set_size(96, 96);
+
+  // definiujemy wszyskie rodzaje animacji, w takiej kolejnosci jak sa na spitemapie
+  // define( kolejny numer wiersza, nazwa animacji, ilosc klatek )
+  
+  sprite_reptoludz.define(0,'walk_up', 14, { ox: 0, oy: 12 });
+  sprite_reptoludz.define(1,'walk_right', 14, { ox: -12, oy: 0 });
+  sprite_reptoludz.define(2,'walk_down', 14, { ox: 0, oy: -12 });
+  sprite_reptoludz.define(3,'walk_left', 14, { ox: 12, oy: 0 });
+  sprite_reptoludz.define(4,'walk_upright', 14, { ox: 4, oy: 14 });
+  sprite_reptoludz.define(5,'walk_downright', 14, { ox: -14, oy: 4 });
+  sprite_reptoludz.define(6,'walk_downleft', 14, { ox: -4, oy: -14 });
+  sprite_reptoludz.define(7,'walk_upleft', 14, { ox: 14, oy: -7 });
+  sprite_reptoludz.define(8,'attack_up', 9, { ox: 0, oy: 6 });
+  sprite_reptoludz.define(9,'attack_right', 9, { ox: -8, oy: -5 });
+  sprite_reptoludz.define(10,'attack_down', 9, { ox: 0, oy: -13 });
+  sprite_reptoludz.define(11,'attack_left', 9, { ox: 9, oy: -4 });
+  sprite_reptoludz.define(12,'attack_upright', 9, { ox: 10, oy: 4 });
+  sprite_reptoludz.define(13,'attack_downright', 9, { ox: -10, oy: 4 });
+  sprite_reptoludz.define(14,'attack_downleft', 9, { ox: -10, oy: -11 });
+  sprite_reptoludz.define(15,'attack_upleft', 9, { ox: 9, oy: -11 });
+  sprite_reptoludz.define(16,'dead_up', 11, { ox: 0, oy: 10 });
+  sprite_reptoludz.define(17,'dead_right', 11, { ox: -15, oy: -6 });
+  sprite_reptoludz.define(18,'dead_down', 11, { ox: 0, oy: -17 });
+  sprite_reptoludz.define(19,'dead_left', 11, { ox: 13, oy: -5 });
+  sprite_reptoludz.define(20,'dead_upright', 11, { ox: 2, oy: 6 });
+  sprite_reptoludz.define(21,'dead_downright', 11, { ox: -10, oy: -4 });
+  sprite_reptoludz.define(22,'dead_downleft', 11, { ox: -1, oy: -14 });
+  sprite_reptoludz.define(23,'dead_upleft', 11, { ox: 10, oy: -5 });
+  sprite_reptoludz.define(24,'stand_up', 14, { ox: 0, oy: 9 });
+  sprite_reptoludz.define(25,'stand_right', 14, { ox: -13, oy: -5 });
+  sprite_reptoludz.define(26,'stand_down', 14, { ox: 0, oy: -18 });
+  sprite_reptoludz.define(27,'stand_left', 14, { ox: 15, oy: -5 });
+  sprite_reptoludz.define(28,'stand_upright', 14, { ox: 1, oy: 12 });
+  sprite_reptoludz.define(29,'stand_downright', 14, { ox: -15, oy: -1 });
+  sprite_reptoludz.define(30,'stand_downleft', 14, { ox: -4, oy: -18 });
+  sprite_reptoludz.define(31,'stand_upleft', 14, { ox: 15, oy: -8 });
+  sprite_reptoludz.define(32,'damage', 6, {ox: 0, oy: 3});
+
+  // definiujemy bazowa ilosc klatek animacji na sekunde
+  sprite_reptoludz.fps(12);
+
+  // ustawiamy animacje zawsze na stand_down
+  sprite_reptoludz.set('stand_down');
+
+  creatures.define("Reptoludz", {
+    vigour: 3,
+    agility: 3,
+    natural_weapon: "Dzida",
+    natural_armour: "Skóra",
+    hit_modifier: 3,
+    attack_range: 53,
+
+    abilities: { pole: 3},
+
+    sprite: sprite_reptoludz,
+    radius: 	12,
+    sight: 		10,
+    hearing: 	10,
+	  });
+	  
+	  var sprite_zolnierz_broniacy = new Sprite();
+
+  // ustawiamy adres do obrazka
+  sprite_zolnierz_broniacy.set_image_src('assets/img/creatures/zolnierz_broniacy.png');
+
+  // ustawiamy wymiary klatki (tj. komórki w której znajduje sie sprite_szczur)
+  // set_size(szerokość, wysokość)
+  sprite_zolnierz_broniacy.set_size(96, 96);
+
+  // definiujemy wszyskie rodzaje animacji, w takiej kolejnosci jak sa na spitemapie
+  // define( kolejny numer wiersza, nazwa animacji, ilosc klatek )
+  
+  sprite_zolnierz_broniacy.define(0,'attack_up', 14, { ox: 0, oy: 0 });
+  sprite_zolnierz_broniacy.define(1,'attack_right', 14, { ox: 0, oy: 0 });
+  sprite_zolnierz_broniacy.define(2,'attack_down', 14, { ox: 0, oy: 0 });
+  sprite_zolnierz_broniacy.define(3,'attack_left', 14, { ox: 0, oy: 0 });
+  sprite_zolnierz_broniacy.define(4,'attack_upright', 14, { ox: 0, oy: 0 });
+  sprite_zolnierz_broniacy.define(5,'attack_downright', 14, { ox: 0, oy: 0 });
+  sprite_zolnierz_broniacy.define(6,'attack_downleft', 14, { ox: 0, oy: 0 });
+  sprite_zolnierz_broniacy.define(7,'attack_upleft', 14, { ox: 0, oy: 0 });
+  sprite_zolnierz_broniacy.define(8,'stand_up', 22, { ox: 0, oy: 0 });
+  sprite_zolnierz_broniacy.define(9,'stand_right', 22, { ox: 0, oy: 0 });
+  sprite_zolnierz_broniacy.define(10,'stand_down', 22, { ox: 0, oy: 0 });
+  sprite_zolnierz_broniacy.define(11,'stand_left', 22, { ox: 0, oy: 0 });
+  sprite_zolnierz_broniacy.define(12,'stand_upright', 22, { ox: 0, oy: 0 });
+  sprite_zolnierz_broniacy.define(13,'stand_downright', 22, { ox: 0, oy: 0 });
+  sprite_zolnierz_broniacy.define(14,'stand_downleft', 22, { ox: 0, oy: 0 });
+  sprite_zolnierz_broniacy.define(15,'stand_upleft', 22, { ox: 0, oy: 0 });
+
+  // definiujemy bazowa ilosc klatek animacji na sekunde
+  sprite_zolnierz_broniacy.fps(12);
+
+  // ustawiamy animacje zawsze na stand_down
+  sprite_zolnierz_broniacy.set('stand_down');
+
+  creatures.define("Żołnierz_Kameleona", {
+    vigour: 3,
+    agility: 3,
+    natural_weapon: "Dzida",
+    natural_armour: "Skóra",
+    hit_modifier: 3,
+
+    abilities: { pole: 3},
+
+    sprite: sprite_zolnierz_broniacy,
+    radius: 	12,
+    sight: 		10,
+    hearing: 	10,
+	  });
+	  
+	  var sprite_rycerz = new Sprite();
+
+  // ustawiamy adres do obrazka
+  sprite_rycerz.set_image_src('assets/img/creatures/rycerz.png');
+
+  // ustawiamy wymiary klatki (tj. komórki w której znajduje sie sprite_szczur)
+  // set_size(szerokość, wysokość)
+  sprite_rycerz.set_size(96, 96);
+
+  // definiujemy wszyskie rodzaje animacji, w takiej kolejnosci jak sa na spitemapie
+  // define( kolejny numer wiersza, nazwa animacji, ilosc klatek )
+  
+  sprite_rycerz.define(0,'walk_up', 13, { ox: 2, oy: 10 });
+  sprite_rycerz.define(1,'walk_right', 13, { ox: -10, oy: 2 });
+  sprite_rycerz.define(2,'walk_down', 13, { ox: -2, oy: -10 });
+  sprite_rycerz.define(3,'walk_left', 13, { ox: 10, oy: -2 });
+  sprite_rycerz.define(4,'walk_upright', 13, { ox: 0, oy: 10 });
+  sprite_rycerz.define(5,'walk_downright', 13, { ox: -10, oy: 0 });
+  sprite_rycerz.define(6,'walk_downleft', 13, { ox: 0, oy: -10 });
+  sprite_rycerz.define(7,'walk_upleft', 13, { ox: 10, oy: 0 });
+  sprite_rycerz.define(8,'attack_sword_up', 13, { ox: 2, oy: 10 });
+  sprite_rycerz.define(9,'attack_sword_right', 13, { ox: -10, oy: 2 });
+  sprite_rycerz.define(10,'attack_sword_down', 13, { ox: -2, oy: -10 });
+  sprite_rycerz.define(11,'attack_sword_left', 13, { ox: 10, oy: -2 });
+  sprite_rycerz.define(12,'attack_sword_upright', 13, { ox: -2, oy: 10 });
+  sprite_rycerz.define(13,'attack_sword_downright', 13, { ox: -10, oy: -1 });
+  sprite_rycerz.define(14,'attack_sword_downleft', 13, { ox: 1, oy: -10 });
+  sprite_rycerz.define(15,'attack_sword_upleft', 13, { ox: 10, oy: 1 });
+  sprite_rycerz.define(16,'dead_up', 47, { ox: 2, oy: 10 });
+  sprite_rycerz.define(17,'dead_right', 47, { ox: -10, oy: 1 });
+  sprite_rycerz.define(18,'dead_down', 47, { ox: -2, oy: -11 });
+  sprite_rycerz.define(19,'dead_left', 47, { ox: 11, oy: -2 });
+  sprite_rycerz.define(20,'dead_upright', 47, { ox: -1, oy: 11 });
+  sprite_rycerz.define(21,'dead_downright', 47, { ox: -10, oy: 0 });
+  sprite_rycerz.define(22,'dead_downleft', 47, { ox: 0, oy: -10 });
+  sprite_rycerz.define(23,'dead_upleft', 47, { ox: 10, oy: 1 });
+  sprite_rycerz.define(24,'stand_up', 40, { ox: 2, oy: 10 });
+  sprite_rycerz.define(25,'stand_right', 40, { ox: -10, oy: 1 });
+  sprite_rycerz.define(26,'stand_down', 40, { ox: -2, oy: -10 });
+  sprite_rycerz.define(27,'stand_left', 40, { ox: 10, oy: -1 });
+  sprite_rycerz.define(28,'stand_upright', 40, { ox: 0, oy: 10 });
+  sprite_rycerz.define(29,'stand_downright', 40, { ox: -10, oy: -1 });
+  sprite_rycerz.define(30,'stand_downleft', 40, { ox: 0, oy: -10 });
+  sprite_rycerz.define(31,'stand_upleft', 40, { ox: 10, oy: 0 });
+  sprite_rycerz.define(32,'damage', 7, {ox: 1, oy: 9});
+
+  // definiujemy bazowa ilosc klatek animacji na sekunde
+  sprite_rycerz.fps(12);
+
+  // ustawiamy animacje zawsze na stand_down
+  sprite_rycerz.set('stand_down');
+
+  creatures.define("Rycerz_Zielonych_Smoków", {
+    vigour: 3,
+    agility: 3,
+    natural_weapon: "Dzida",
+    natural_armour: "Skóra",
+    hit_modifier: 3,
+	attack_range: 53,
+
+    abilities: { pole: 3},
+
+    sprite: sprite_rycerz,
+    radius: 	12,
+    sight: 		10,
+    hearing: 	10,
+	  });
+	  
+	  var sprite_mutant_z_macka = new Sprite();
+	  
+	  // ustawiamy adres do obrazka
+  sprite_mutant_z_macka.set_image_src('assets/img/creatures/mutant_macka.png');
+
+  // ustawiamy wymiary klatki (tj. komórki w której znajduje sie sprite_szczur)
+  // set_size(szerokość, wysokość)
+  sprite_mutant_z_macka.set_size(96, 96);
+
+  // definiujemy wszyskie rodzaje animacji, w takiej kolejnosci jak sa na spitemapie
+  // define( kolejny numer wiersza, nazwa animacji, ilosc klatek )
+  
+  sprite_mutant_z_macka.define(0,'walk_up', 8, { ox: -1, oy: 17 });
+  sprite_mutant_z_macka.define(1,'walk_right', 8, { ox: -11, oy: 5 });
+  sprite_mutant_z_macka.define(2,'walk_down', 8, { ox: 1, oy: -5 });
+  sprite_mutant_z_macka.define(3,'walk_left', 8, { ox: 10, oy: 7 });
+  sprite_mutant_z_macka.define(4,'walk_upright', 8, { ox: -7, oy: 13 });
+  sprite_mutant_z_macka.define(5,'walk_downright', 8, { ox: -5, oy: -2 });
+  sprite_mutant_z_macka.define(6,'walk_downleft', 8, { ox: 7, oy: 0 });
+  sprite_mutant_z_macka.define(7,'walk_upleft', 8, { ox: 5, oy: 15 });
+  sprite_mutant_z_macka.define(8,'attack_up', 12, { ox: -1, oy: 16 });
+  sprite_mutant_z_macka.define(9,'attack_right', 12, { ox: -12, oy: 5 });
+  sprite_mutant_z_macka.define(10,'attack_down', 12, { ox: 0, oy: -4 });
+  sprite_mutant_z_macka.define(11,'attack_left', 12, { ox: 10, oy: 7 });
+  sprite_mutant_z_macka.define(12,'attack_upright', 12, { ox: -7, oy: 11 });
+  sprite_mutant_z_macka.define(13,'attack_downright', 12, { ox: -7, oy: 0 });
+  sprite_mutant_z_macka.define(14,'attack_downleft', 12, { ox: 5, oy: 0 });
+  sprite_mutant_z_macka.define(15,'attack_upleft', 12, { ox: 6, oy: 11 });
+  sprite_mutant_z_macka.define(16,'dead_up', 13, { ox: -1, oy: 16 });
+  sprite_mutant_z_macka.define(17,'dead_right', 13, { ox: -10, oy: 5 });
+  sprite_mutant_z_macka.define(18,'dead_down', 13, { ox: 2, oy: -4 });
+  sprite_mutant_z_macka.define(19,'dead_left', 13, { ox: 10, oy: 7 });
+  sprite_mutant_z_macka.define(20,'dead_upright', 13, { ox: -5, oy: 17 });
+  sprite_mutant_z_macka.define(21,'dead_downright', 13, { ox: -10, oy: 0 });
+  sprite_mutant_z_macka.define(22,'dead_downleft', 13, { ox: 5, oy: -4 });
+  sprite_mutant_z_macka.define(23,'dead_upleft', 13, { ox: 10, oy: 12 });
+  sprite_mutant_z_macka.define(24,'stand_up', 13, { ox: -2, oy: 19 });
+  sprite_mutant_z_macka.define(25,'stand_right', 13, { ox: -13, oy: 4 });
+  sprite_mutant_z_macka.define(26,'stand_down', 13, { ox: 2, oy: -7 });
+  sprite_mutant_z_macka.define(27,'stand_left', 13, { ox: 13, oy: 8 });
+  sprite_mutant_z_macka.define(28,'stand_upright', 13, { ox: -6, oy: 12 });
+  sprite_mutant_z_macka.define(29,'stand_downright', 13, { ox: -5, oy: 0 });
+  sprite_mutant_z_macka.define(30,'stand_downleft', 13, { ox: 5, oy: 0 });
+  sprite_mutant_z_macka.define(31,'stand_upleft', 13, { ox: 5, oy: 12 });
+  sprite_mutant_z_macka.define(32,'damage', 5, {ox: 4, oy: 2});
+
+  // definiujemy bazowa ilosc klatek animacji na sekunde
+  sprite_mutant_z_macka.fps(12);
+
+  // ustawiamy animacje zawsze na stand_down
+  sprite_mutant_z_macka.set('stand_down');
+
+  creatures.define("Mutant_z_macką", {
+    vigour: 3,
+    agility: 3,
+    natural_weapon: "Dzida",
+    natural_armour: "Skóra",
+    hit_modifier: 3,
+	attack_range: 41,
+
+    abilities: { pole: 3},
+
+    sprite: sprite_mutant_z_macka,
+    radius: 	12,
+    sight: 		10,
+    hearing: 	10,
+	  });
+	  
+	  var sprite_mutant_z_pazurem = new Sprite();
+	  
+	  // ustawiamy adres do obrazka
+  sprite_mutant_z_pazurem.set_image_src('assets/img/creatures/mutant_pazur.png');
+
+  // ustawiamy wymiary klatki (tj. komórki w której znajduje sie sprite_szczur)
+  // set_size(szerokość, wysokość)
+  sprite_mutant_z_pazurem.set_size(96, 96);
+
+  // definiujemy wszyskie rodzaje animacji, w takiej kolejnosci jak sa na spitemapie
+  // define( kolejny numer wiersza, nazwa animacji, ilosc klatek )
+  
+  sprite_mutant_z_pazurem.define(0,'walk_up', 12, { ox: -1, oy: 17 });
+  sprite_mutant_z_pazurem.define(1,'walk_right', 12, { ox: -16, oy: 0 });
+  sprite_mutant_z_pazurem.define(2,'walk_down', 12, { ox: 1, oy: -15 });
+  sprite_mutant_z_pazurem.define(3,'walk_left', 12, { ox: 15, oy: 3 });
+  sprite_mutant_z_pazurem.define(4,'walk_upright', 12, { ox: -4, oy: 17 });
+  sprite_mutant_z_pazurem.define(5,'walk_downright', 12, { ox: -16, oy: -3 });
+  sprite_mutant_z_pazurem.define(6,'walk_downleft', 12, { ox: 3, oy: -16 });
+  sprite_mutant_z_pazurem.define(7,'walk_upleft', 12, { ox: 15, oy: 4 });
+  sprite_mutant_z_pazurem.define(8,'attack_up', 9, { ox: -1, oy: 16 });
+  sprite_mutant_z_pazurem.define(9,'attack_right', 9, { ox: -16, oy: 0 });
+  sprite_mutant_z_pazurem.define(10,'attack_down', 9, { ox: 1, oy: -15 });
+  sprite_mutant_z_pazurem.define(11,'attack_left', 9, { ox: 16, oy: 2 });
+  sprite_mutant_z_pazurem.define(12,'attack_upright', 9, { ox: -4, oy: 18 });
+  sprite_mutant_z_pazurem.define(13,'attack_downright', 9, { ox: -16, oy: -3 });
+  sprite_mutant_z_pazurem.define(14,'attack_downleft', 9, { ox: 3, oy: -14 });
+  sprite_mutant_z_pazurem.define(15,'attack_upleft', 9, { ox: 17, oy: 5 });
+  sprite_mutant_z_pazurem.define(16,'dead_up', 19, { ox: -1, oy: 16 });
+  sprite_mutant_z_pazurem.define(17,'dead_right', 19, { ox: -15, oy: 0 });
+  sprite_mutant_z_pazurem.define(18,'dead_down', 19, { ox: 1, oy: -14 });
+  sprite_mutant_z_pazurem.define(19,'dead_left', 19, { ox: 16, oy: 2 });
+  sprite_mutant_z_pazurem.define(20,'dead_upright', 19, { ox: -3, oy: 17 });
+  sprite_mutant_z_pazurem.define(21,'dead_downright', 19, { ox: -17, oy: -3 });
+  sprite_mutant_z_pazurem.define(22,'dead_downleft', 19, { ox: 3, oy: -16 });
+  sprite_mutant_z_pazurem.define(23,'dead_upleft', 19, { ox: 17, oy: 6 });
+  sprite_mutant_z_pazurem.define(24,'stand_up', 23, { ox: -1, oy: 19 });
+  sprite_mutant_z_pazurem.define(25,'stand_right', 23, { ox: -16, oy: 1 });
+  sprite_mutant_z_pazurem.define(26,'stand_down', 23, { ox: 1, oy: -14 });
+  sprite_mutant_z_pazurem.define(27,'stand_left', 23, { ox: 16, oy: 3 });
+  sprite_mutant_z_pazurem.define(28,'stand_upright', 23, { ox: -4, oy: 19 });
+  sprite_mutant_z_pazurem.define(29,'stand_downright', 23, { ox: -17, oy: -2 });
+  sprite_mutant_z_pazurem.define(30,'stand_downleft', 23, { ox: 3, oy: -15 });
+  sprite_mutant_z_pazurem.define(31,'stand_upleft', 23, { ox: 17, oy: 6 });
+  sprite_mutant_z_pazurem.define(32,'damage', 6, {ox: -2, oy: 15});
+
+  // definiujemy bazowa ilosc klatek animacji na sekunde
+  sprite_mutant_z_pazurem.fps(12);
+
+  // ustawiamy animacje zawsze na stand_down
+  sprite_mutant_z_pazurem.set('stand_down');
+
+  creatures.define("Mutant_z_pazurem", {
+    vigour: 3,
+    agility: 3,
+    natural_weapon: "Dzida",
+    natural_armour: "Skóra",
+    hit_modifier: 3,
+	attack_range: 32,
+
+    abilities: { pole: 3},
+
+    sprite: sprite_mutant_z_pazurem,
+    radius: 	12,
+    sight: 	10,
+    hearing: 	10,
+	  });
+	  
+	  var sprite_zbrojny_zielonych_smokow = new Sprite();
+	  
+	  // ustawiamy adres do obrazka
+  sprite_zbrojny_zielonych_smokow.set_image_src('assets/img/creatures/zbrojny_zielonych_smokow.png');
+
+  // ustawiamy wymiary klatki (tj. komórki w której znajduje sie sprite_szczur)
+  // set_size(szerokość, wysokość)
+  sprite_zbrojny_zielonych_smokow.set_size(96, 96);
+
+  // definiujemy wszyskie rodzaje animacji, w takiej kolejnosci jak sa na spitemapie
+  // define( kolejny numer wiersza, nazwa animacji, ilosc klatek )
+  
+  sprite_zbrojny_zielonych_smokow.define(0,'walk_up', 12, { ox: 0, oy: 8 });
+  sprite_zbrojny_zielonych_smokow.define(1,'walk_right', 12, { ox: -8, oy: 0 });
+  sprite_zbrojny_zielonych_smokow.define(2,'walk_down', 12, { ox: 0, oy: -7 });
+  sprite_zbrojny_zielonych_smokow.define(3,'walk_left', 12, { ox: 7, oy: 1 });
+  sprite_zbrojny_zielonych_smokow.define(4,'walk_upright', 12, { ox: 0, oy: 8 });
+  sprite_zbrojny_zielonych_smokow.define(5,'walk_downright', 12, { ox: -8, oy: 0 });
+  sprite_zbrojny_zielonych_smokow.define(6,'walk_downleft', 12, { ox: -1, oy: -8 });
+  sprite_zbrojny_zielonych_smokow.define(7,'walk_upleft', 12, { ox: 9, oy: 0 });
+  sprite_zbrojny_zielonych_smokow.define(8,'attack_up', 13, { ox: 1, oy: 6 });
+  sprite_zbrojny_zielonych_smokow.define(9,'attack_right', 13, { ox: -6, oy: 2 });
+  sprite_zbrojny_zielonych_smokow.define(10,'attack_down', 13, { ox: -2, oy: -6 });
+  sprite_zbrojny_zielonych_smokow.define(11,'attack_left', 13, { ox: 6, oy: -2 });
+  sprite_zbrojny_zielonych_smokow.define(12,'attack_upright', 13, { ox: -1, oy: 7 });
+  sprite_zbrojny_zielonych_smokow.define(13,'attack_downright', 13, { ox: -8, oy: -2 });
+  sprite_zbrojny_zielonych_smokow.define(14,'attack_downleft', 13, { ox: 1, oy: -7 });
+  sprite_zbrojny_zielonych_smokow.define(15,'attack_upleft', 13, { ox: 7, oy: 2 });
+  sprite_zbrojny_zielonych_smokow.define(16,'dead_up', 20, { ox: -1, oy: 7 });
+  sprite_zbrojny_zielonych_smokow.define(17,'dead_right', 20, { ox: -7, oy: 0 });
+  sprite_zbrojny_zielonych_smokow.define(18,'dead_down', 20, { ox: 1, oy: -8 });
+  sprite_zbrojny_zielonych_smokow.define(19,'dead_left', 20, { ox: 7, oy: 1 });
+  sprite_zbrojny_zielonych_smokow.define(20,'dead_upright', 20, { ox: 0, oy: 8 });
+  sprite_zbrojny_zielonych_smokow.define(21,'dead_downright', 20, { ox: -9, oy: 0 });
+  sprite_zbrojny_zielonych_smokow.define(22,'dead_downleft', 20, { ox: -1, oy: -7 });
+  sprite_zbrojny_zielonych_smokow.define(23,'dead_upleft', 20, { ox: 8, oy: 0 });
+  sprite_zbrojny_zielonych_smokow.define(24,'stand_up', 35, { ox: -1, oy: 9 });
+  sprite_zbrojny_zielonych_smokow.define(25,'stand_right', 35, { ox: -7, oy: 1 });
+  sprite_zbrojny_zielonych_smokow.define(26,'stand_down', 35, { ox: 0, oy: -6 });
+  sprite_zbrojny_zielonych_smokow.define(27,'stand_left', 35, { ox: 7, oy: 2 });
+  sprite_zbrojny_zielonych_smokow.define(28,'stand_upright', 35, { ox: 0, oy: 9 });
+  sprite_zbrojny_zielonych_smokow.define(29,'stand_downright', 35, { ox: -9, oy: 2 });
+  sprite_zbrojny_zielonych_smokow.define(30,'stand_downleft', 35, { ox: -1, oy: -7 });
+  sprite_zbrojny_zielonych_smokow.define(31,'stand_upleft', 35, { ox: 8, oy: 0 });
+  sprite_zbrojny_zielonych_smokow.define(32,'damage', 5, {ox: 1, oy: 8});
+
+  // definiujemy bazowa ilosc klatek animacji na sekunde
+  sprite_zbrojny_zielonych_smokow.fps(12);
+
+  // ustawiamy animacje zawsze na stand_down
+  sprite_zbrojny_zielonych_smokow.set('stand_down');
+
+  creatures.define("zbrojny_zielonych_smokow", {
+    vigour: 3,
+    agility: 3,
+    natural_weapon: "Dzida",
+    natural_armour: "Skóra",
+    hit_modifier: 3,
+	attack_range: 57,
+
+    abilities: { pole: 3},
+
+    sprite: sprite_zbrojny_zielonych_smokow,
+    radius: 	12,
+    sight: 		10,
+    hearing: 	10,
+	  });
+}
